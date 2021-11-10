@@ -1,0 +1,127 @@
+grammar org.xtext.Agen with org.eclipse.xtext.common.Terminals
+
+generate agen "http://www.xtext.org/Agen"
+
+Model:
+	(types+=Types)*
+;
+
+Types:
+	RunConfiguration | Fault | FaultCond | Where | CodeBlock | Condition | Syncpoint | Log
+;
+
+RunConfiguration:
+	'RunConfiguration' '{' 'CoordinatorLocation' '=' CoordinatorLocation = STRING ';' nodes+=(Node)* '}'
+;
+
+Node:
+	'Node' name=ID '(' 'firstAttachPoint' '=' firstAttachPoint = STRING ';' 'location' '=' nodeLocation=STRING (';' 'logData' '=' logLocations+=ID*)? ';' faultIDs+=(ID)* ')'
+;
+
+Log:
+	'Logging' name=ID '{' faultCond=ID (';' 'extraData' '=' extraData=CodeBlock)? (';' 'stateBasedVariables' '=' stateBased=CodeBlock)? '}'
+;
+
+Syncpoint:
+	'Syncpoint' name=ID '(' nodesDependant+=ID* ';' 'type' '=' type=syncpointType ';' 'onFailure' '=' onFail=syncpointOnFail ';' 'faultCond' '=' faultCond=FaultCond ')'
+;
+
+enum syncpointOnFail:
+	continue='continue' | retry = 'retry'
+;
+
+enum syncpointType:
+	oneTime='onetime'| Recurrent='recurrent'
+;
+
+Fault:
+	'Fault' name=ID '{' 'pointcut' '=' pointcut=STRING ';' (execParams+=ExecParams)* '}'
+;
+
+ExecParams:
+	'ExecParams' '(' name=ID ')' | 'ExecParams' (name=ID)? '{' 'where' '=' where=JOIN_TYPE (';' 'whenToExecute{' when=When '}')? ';' 'whatToExecute{' what=What '}'  '}'
+;
+
+What:
+	codeBlock = CodeBlock | sleep = Sleep | exit = Exit | bigPacketFault = BigPacketFault | leakFault = LeakFault | alterPacketFault = AlterPacketFault | cpuLoader=CPULoader | skipExecution=SkipExecution | repeatExecution=RepeatExecution
+	;
+
+RepeatExecution:
+	'repeatExecution' '(' times=INT ')'
+;
+
+SkipExecution:
+	 'skipExecution'
+;
+
+AlterPacketFault:
+	'alterPacketFault' '(' originalData = INT ',' kindOfAlteration = AlterPacketFaultType ')'
+;
+
+enum AlterPacketFaultType:
+	RANDOM='random' | ZERO='zero'
+;
+
+LeakFault:
+	'leakFault' '(' nrofLeaks = INT ')'
+;
+
+BigPacketFault:
+	'bigPacketFault' '(' originalData = INT ',' timesLarger = INT ')'
+;
+
+Exit:
+	'exit' '(' type=INT ')'
+;
+
+Sleep:
+	'sleep' '(' time=INT ')'
+;
+
+CPULoader:
+	'cpuLoader' '(' amount=INT ')'
+;
+
+CodeBlock:
+	('BlockID' '(' name=ID ')') | ('CodeBlock' (name=ID)? '{' ('imports' '{' imports=CODE_BOX '}' ',' 'code' '{')? code=CODE_BOX '}')
+;
+
+FaultCond:
+	('FaultCond' name=ID) | ('FaultCond' (name=ID)? '{' where=Where ';' ('whenToIncrement{' when=When '}')? (extraData=CodeBlock)? '}')
+;
+
+When:
+	 ( betweenRounds = betweenRounds | betweenSeconds = betweenSeconds | random = Random | randomBetweenRound = randomBetweenRound | 'ifCondition' '(' ifCondition=Condition ')' | faultCond=FaultCond | 'syncpoint' '=' syncpoint=ID)
+;
+
+Random:
+	'random' '(' chance = INT ')'
+;
+
+betweenSeconds:
+	'betweenSeconds' '(' start = INT ',' end = INT ')'
+;
+
+betweenRounds:
+	'betweenRound' '(' start = INT ',' end = INT ',' interval = INT (',' condition=Condition)? (',' random = Random)?')'
+;
+
+randomBetweenRound:
+	'randomBetweenRound' '(' start = INT ',' end = INT ',' interval = INT ',' chance = INT ')'
+;
+
+Condition:
+	('CondID' '(' name=ID ')') | ('Condition' (name=ID)? '{' ('imports' '{' imports=CODE_BOX '}' ',' 'code' '{')? code=CODE_BOX '}')
+;
+
+Where:
+	'whereToExecute' '{'(joinType=JOIN_TYPE ';')? name=STRING '}'
+;
+
+enum JOIN_TYPE:
+	BEFORE='Before' | AFTER='After'
+;
+
+terminal CODE_BOX:
+	'///' -> '///'
+;

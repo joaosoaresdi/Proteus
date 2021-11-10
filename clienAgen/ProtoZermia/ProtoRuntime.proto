@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+option java_package = "zermia.proto";
+
+service ZermiaServices{
+	rpc FirstConnection (ConnectionRequest) returns (ConnectionReply) {}
+	rpc Logging (Log) returns (ConnectionReply) {}
+	rpc SyncPoint (StatusQuestion) returns (ConnectionReply) {}
+}
+
+message ConnectionRequest{ 
+	string replicaID = 1;
+	string nodeLocation = 2;
+	bool faulty = 3;
+	repeated Syncpoint syncpoint = 4;
+}
+
+message ConnectionReply{
+	bool messageAcknowlegement = 1;
+}
+
+message Log{
+	string nodeName = 1;
+	string faultName = 2;
+	int64 timestamp = 3;
+	repeated ExecInfo execInfo = 4;
+	string randomLogInfo = 5;
+}
+
+message ExecInfo{
+	string execName = 1;
+	enum WhenType {
+		Round = 0;
+		Time = 1;
+		Boolean = 2;
+		Random = 3;
+		Sync = 4;
+		FaultCond = 5;
+		Custom = 6;
+	}
+	WhenType whenType = 2;
+	string whenValue = 3;
+}
+
+message Syncpoint{
+	string name = 1;
+	string faultCondName = 2;
+	enum synctype {
+		onetime = 0;
+		recurrent = 1;
+	}
+	synctype syncType = 3;
+	enum nodetype {
+		trigger = 0;
+		dependant = 1;
+	}
+	nodetype nodeType = 4;
+}
+
+message StatusQuestion{
+	string nodeName = 1;
+	string syncpointName = 2;
+}
