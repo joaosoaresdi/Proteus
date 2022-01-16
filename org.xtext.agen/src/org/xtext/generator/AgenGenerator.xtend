@@ -31,6 +31,7 @@ import org.xtext.agen.What
 import org.xtext.agen.When
 import org.xtext.agen.Where
 import java.util.ArrayList
+import org.xtext.agen.CPULoader
 
 /**
  * Generates code from your model files on save.
@@ -39,17 +40,20 @@ import java.util.ArrayList
  */
 class AgenGenerator extends AbstractGenerator {
 
-	HashMap<String, String> codeBlocksMap = newHashMap();
-	HashMap<String, String> condsMap = newHashMap();
+	HashMap<String, CodeBlock> codeBlocksMap = newHashMap();
+	HashMap<String, Condition> condsMap = newHashMap();
 	HashMap<String, FaultCond> faultCondsMap = newHashMap();
 	HashMap<String, Syncpoint> syncpointsMap = newHashMap();
 	HashMap<String, ExecParams> execParamsMap = newHashMap();
 	HashMap<String, String> faultsCompiled = newHashMap();
 	//firstvalue is the header second is the compiled faultCond
 	HashMap<String, Pair<String,String>> logsCompiled = newHashMap();
+	HashMap<String, Log> logsMap = newHashMap();
 	//a fault e a lista de syncpoints que depende
 	HashMap<String, ArrayList<String>> syncpointsInitialRequest = newHashMap();
 	HashMap<String, ArrayList<String>> faultCondPerFault = newHashMap();
+	HashMap<String, ArrayList<String>> importsPerFault = newHashMap();
+	HashMap<String, ArrayList<String>> condsPerFault = newHashMap();
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		clearLists()
@@ -60,70 +64,81 @@ class AgenGenerator extends AbstractGenerator {
 			//the object types extends EObject so i have access to its methods
 		}
 		fsa.generateFile(
-			"helper.java", preMadeFaults
+			"PreMadeFaults.java", preMadeFaults
 		)
 	}
 	
 	def compile(RunConfiguration runConfig, IFileSystemAccess2 fsa){
 		for (node : runConfig.nodes){
 			fsa.generateFile(
-				node.name + 'gen.java', node.compile(runConfig.coordinatorLocation)
+				node.name + 'gen.java', node.compile(runConfig.runtimePackage, runConfig.coordinatorLocation)
 			)
 		}
 	}
 	
-	def compile(Node node, String coordinatorLocation) {
+	def compile(Node node, String runtimePackage, String coordinatorLocation) {
 		if(node.faultIDs.get(0) == 'none'){
+			var nodeConditions = newArrayList
 			return
 			'''
-			«makeHeader(coordinatorLocation, node.nodeLocation, node.name, false, newArrayList, newArrayList)»
-			«makeLogHeader(node.logLocations)»
-			«zermiaRuntimeJunction(node.firstAttachPoint)»
-			«makeLogConditions(node.logLocations)»
+			«makeHeader(runtimePackage, newArrayList, coordinatorLocation, node.nodeLocation, node.name, false, newArrayList, newArrayList)»
+			«makeLogHeader(node.logLocations, node.name)»
+			«proteusRuntimeJunction(node.firstAttachPoint)»
+			«makeLogConditions(node.logLocations, nodeConditions)»
+			«makeCondFuncs(node.name, nodeConditions)»
+			}
 			'''
 		} else {
 			var nodeSyncpointsInitialRequestDepend = newArrayList
 			var nodeSyncpointsInitialRequestTrigger = newArrayList
 			var nodeFaultConditions = newArrayList
+			var nodeExtraImports = newArrayList
+			var nodeConditions = newArrayList
+			importsPerFault.put(node.name, newArrayList)
 			var ret =
 			'''
-			«makeLogHeader(node.logLocations)»
-			«zermiaRuntimeJunction(node.firstAttachPoint)»
+			«makeLogHeader(node.logLocations, node.name)»
+			«proteusRuntimeJunction(node.firstAttachPoint)»
 			
 			«IF node.faultIDs.get(0) == 'all'»
 				«FOR faults : faultsCompiled.entrySet SEPARATOR '\n'»
-					«var discard = nodeSyncpointsInitialRequestDepend.addAll(syncpointsInitialRequest.get(faults.key))»
 					«faults.value»
+					«var discard = nodeSyncpointsInitialRequestDepend.addAll(syncpointsInitialRequest.get(faults.key))»
 					«var discard2 = nodeFaultConditions.addAll(faultCondPerFault.get(faults.key))»
+					«var discard3 = nodeExtraImports.addAll(importsPerFault.get(faults.key))»
+					«var discard4 = nodeConditions.addAll(condsPerFault.get(faults.key))»
 				«ENDFOR»
 			«ELSE»
 				«FOR faultID : node.faultIDs»
-					«var discard = nodeSyncpointsInitialRequestDepend.addAll(syncpointsInitialRequest.get(faultID))»
 					«faultsCompiled.get(faultID)»
+					«var discard = nodeSyncpointsInitialRequestDepend.addAll(syncpointsInitialRequest.get(faultID))»
 					«var discard2 = nodeFaultConditions.addAll(faultCondPerFault.get(faultID))»
-					
+					«var discard3 = nodeExtraImports.addAll(importsPerFault.get(faultID))»
+					«var discard4 = nodeConditions.addAll(condsPerFault.get(faultID))»
 				«ENDFOR»
 			«ENDIF»
 			«makeSyncpointsFaultCond(node.name, nodeSyncpointsInitialRequestTrigger, nodeFaultConditions)»
-			«makeFaultCond(nodeFaultConditions)»
-			«makeLogConditions(node.logLocations)»
-			«makeCondFuncs»
+			«makeFaultCond(nodeFaultConditions, nodeConditions)»
+			«makeLogConditions(node.logLocations, nodeConditions)»
+			«makeCondFuncs(node.name, nodeConditions)»
 			}
 			'''
-			ret = makeHeader(coordinatorLocation, node.nodeLocation, node.name, true, nodeSyncpointsInitialRequestDepend, nodeSyncpointsInitialRequestTrigger) + ret
+			ret = makeHeader(runtimePackage, nodeExtraImports, coordinatorLocation, node.nodeLocation, node.name, true, nodeSyncpointsInitialRequestDepend, nodeSyncpointsInitialRequestTrigger) + ret
 			return ret
 		}
 	}
 		
-	def makeFaultCond(ArrayList<String> nodeFaultConditions) {
+	def makeFaultCond(ArrayList<String> nodeFaultConditions, ArrayList<String> nodeConditions) {
 		var ret = ""
 		for (faultCondName : nodeFaultConditions) {
 			ret += faultCondsMap.get(faultCondName).compile("")
+			nodeConditions.addAll(condsPerFault.get(faultCondName))
 		}
 		return ret
 	}
 		
 	def String makeSyncpointsFaultCond(String nodeName, ArrayList<String> nodeSyncpointsInitialRequestTrigger, ArrayList<String> nodeFaultConditions) {
+		//add the faultConds necessary for this nodes syncpoints
 		var ret = ''
 		for (syncs : syncpointsMap.values){
 			for ( syncsDependants : syncs.nodesDependant ){
@@ -136,26 +151,41 @@ class AgenGenerator extends AbstractGenerator {
 		return ret
 	}
 		
-	def String makeLogConditions(EList<String> list) {
+	def String makeLogConditions(EList<String> logList, ArrayList<String> nodeConditions) {
 		var ret=''
-		for (logName : list){
+		for (logName : logList){
 			if (logName === null) return ret
 			else {
-				var vals = logsCompiled.get(logName)
-				return ret.concat(vals.getValue())
+				var log = logsMap.get(logName)
+				//log.faultCond.extraData = combineCodeBoxes(log.faultCond.extraData, log.extraData)
+				var stateBased = ""
+				var extraData = ""
+				if (log.stateBased!==null) {
+					stateBased = log.stateBased.compile(logName)
+				}
+				if (log.extraData!==null) {
+					extraData = log.extraData.compile(logName)
+				}
+				var logFaultCond = faultCondsMap.get(log.faultCond);
+				ret = ret.concat(logFaultCond.compile(extraData))
+				nodeConditions.addAll(condsPerFault.get(logName))
 			}
 		}
+		return ret
 	}
 		
-	def String makeLogHeader(EList<String> list) {
+	def String makeLogHeader(EList<String> list, String nodeName) {
 		var ret=''
 		for (logName : list){
 			if (logName === null) return ret
 			else {
-				var vals = logsCompiled.get(logName)
-				return ret.concat(vals.getKey())
+				if(logsMap.get(logName).stateBased !== null){
+				var vals = logsMap.get(logName).stateBased.compile(nodeName)
+				ret.concat(vals)
+				}
 			}
 		}
+		return ret
 	}
 	
 	def compileFaults(Resource resource) {
@@ -163,6 +193,8 @@ class AgenGenerator extends AbstractGenerator {
 		for(fault : resource.allContents.toIterable.filter(Fault)){
 			syncpointsInitialRequest.put(fault.name, newArrayList)
 			faultCondPerFault.put(fault.name, newArrayList)
+			condsPerFault.put(fault.name, newArrayList)
+			importsPerFault.put(fault.name, newArrayList)
 			var result=''
 			result += fault.compile + '\n'
 			faultsCompiled.put(fault.name, result)
@@ -176,16 +208,21 @@ class AgenGenerator extends AbstractGenerator {
 				int «exec.getName»counter = 0;
 			«ENDIF»
 		«ENDFOR»
-		@Around(execution («fault.pointcut»))
-		public void «fault.name»(ProceedingJoinPoint joinPoint){
+		@Around("«fault.pointcut»")
+		public Object «fault.name»(ProceedingJoinPoint joinpoint){
 			Object retobj = null;
 			String randomLogData = "";
 			long startTimestamp = System.currentTimeMillis();
-			Object[] args = joinPoint.getArgs();
+			Object[] args = joinpoint.getArgs();
 			«execCompileConditions(fault.execParams, 'Before', fault.name)»
-			retobj = joinpoint.proceed(arg);
+			try {
+				retobj = joinpoint.proceed(args);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
 			«execCompileConditions(fault.execParams, 'After', fault.name)»
-			ZermiaRuntime.sendLogs(curNodeName, "«fault.name»", startTimestamp, randomLogData);
+			ProteusRuntime.sendLogs(curNodeName, "«fault.name»", startTimestamp, randomLogData);
 			return retobj;
 		}
 		'''
@@ -205,6 +242,7 @@ class AgenGenerator extends AbstractGenerator {
 	«IF exec.when !== null»
 		«exec.when.compile(exec.what.compile(faultName).toString, exec.getName, faultName)»
 	«ELSE»
+		ProteusRuntime.addLogExecInfo("«exec.getName»", "Always", "");
 		«exec.what.compile(faultName)»
 	«ENDIF»
 	'''
@@ -215,10 +253,10 @@ class AgenGenerator extends AbstractGenerator {
 		«makeBetweenIf(when.betweenRounds.start, when.betweenRounds.end, when.betweenRounds.interval , execParamsName + "counter")»
 		«IF when.betweenRounds.random !== null»
 			«when.betweenRounds.random.compile»
-			ZermiaRuntime.addLogExecInfo(«execParamsName», Round, String.valueOf(«execParamsName»counter);
+			ProteusRuntime.addLogExecInfo("«execParamsName»", "Round", String.valueOf(«execParamsName»counter));
 			«whatToExecute» }}
 		«ELSE»
-			ZermiaRuntime.addLogExecInfo(«execParamsName», Round, String.valueOf(«execParamsName»counter);
+			ProteusRuntime.addLogExecInfo("«execParamsName»", "Round", String.valueOf(«execParamsName»counter));
 			«whatToExecute» }
 		«ENDIF»
 		«IF when.betweenRounds.condition!==null»
@@ -228,29 +266,36 @@ class AgenGenerator extends AbstractGenerator {
 			«execParamsName»counter++;
 		«ENDIF»
 	«ELSEIF when.ifCondition !== null»
+		«var discard = condsPerFault.get(faultName).add(when.ifCondition.getName)»
 		if(«when.ifCondition.getName»(retobj, joinpoint)){
-		ZermiaRuntime.addLogExecInfo(«execParamsName», Custom, "true");
+		ProteusRuntime.addLogExecInfo("«execParamsName»", "Custom", "true");
 		«whatToExecute» }
 	«ELSEIF when.random !== null»
 		«when.random.compile»
-		ZermiaRuntime.addLogExecInfo(«execParamsName», Random, "true");
+		ProteusRuntime.addLogExecInfo("«execParamsName»", "Random", "true");
 		«whatToExecute» }
 	«ELSEIF when.faultCond !== null»
-		«faultCondPerFault.get(faultName).add(when.faultCond.name)»
-		ZermiaRuntime.addLogExecInfo(«execParamsName», FaultCond, "true");
+		«var discard = faultCondPerFault.get(faultName).add(when.faultCond.name)»
+		ProteusRuntime.addLogExecInfo("«execParamsName»", "FaultCond", "true");
 		«makeFaultCondIf(when.faultCond, whatToExecute)»
 	«ELSEIF when.syncpoint!==null»
 		«var syncpointOnFail = syncpointsMap.get(when.syncpoint).onFail.literal»
-		«syncpointsInitialRequest.get(faultName).add(when.syncpoint)»
+		«var discard = syncpointsInitialRequest.get(faultName).add(when.syncpoint)»
 		«IF syncpointOnFail.equals('continue')»
-			if(ZermiaRuntime.askSyncpointStatus(curNodeName, «when.syncpoint»)){
-				ZermiaRuntime.addLogExecInfo(«execParamsName», Sync, "true");
+			if(ProteusRuntime.askSyncpointStatus(curNodeName, "«when.syncpoint»")){
+				ProteusRuntime.addLogExecInfo("«execParamsName»", "Sync", "true");
 				«whatToExecute»
 			}
 		«ELSEIF syncpointOnFail.equals('retry')»
-			while(!ZermiaRuntime.askSyncpointStatus(curNodeName, «when.syncpoint»)){ Thread.sleep(1000); }
-			ZermiaRuntime.addLogExecInfo(«execParamsName», Sync, "«when.syncpoint»");
-			«whatToExecute»
+			while(!ProteusRuntime.askSyncpointStatus(curNodeName, "«when.syncpoint»")){
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					System.exit(0);
+				}
+				ProteusRuntime.addLogExecInfo("«execParamsName»", "Sync", "«when.syncpoint»");
+				«whatToExecute»
 			}
 		«ENDIF»
 	«ENDIF»
@@ -259,7 +304,7 @@ class AgenGenerator extends AbstractGenerator {
 	def compile (Random random)
 	'''
 	Integer randVal = randomGen.nextInt(100);
-	if(randVal>«random.chance») {
+	if(randVal<«random.chance») {
 	'''
 
 	def String makeBetweenIf(int start, int end, int interval, String varname) {
@@ -284,34 +329,33 @@ class AgenGenerator extends AbstractGenerator {
 			realfcond = faultCondsMap.get(realfcond.name)
 		}
 		if (realfcond.when.betweenRounds !== null && realfcond.when.betweenRounds.interval != 0){
-			return 'if( ' + realfcond.getName + '){' + whatToExecute + '}'
+			return 'if( ' + realfcond.getName + '){\n' + whatToExecute + '}'
 		}
 		if (realfcond.when.betweenSeconds !== null){
-			return 'if( ' + realfcond.getName + '){' + whatToExecute + '}'
+			return 'if( ' + realfcond.getName + '){\n' + whatToExecute + '}'
 		}
-		return 'if( ' + realfcond.getName + '){' + whatToExecute + '\n' + realfcond.getName + '= false}'
+		return 'if( ' + realfcond.getName + '){\n' + whatToExecute + '\n' + realfcond.getName + '= false;}'
 	}
 
 	private def compile(FaultCond fcond, String additionalLogData){
 		//in case the fcond is just a name get the real one
 		var realfcond = faultCondsMap.get(fcond.name)
-		syncpointsInitialRequest.put(fcond.name, newArrayList)
-		var whatToExecute = combineCodeBoxWithStrings(realfcond.extraData, realfcond.name + ' = true', additionalLogData)
+		var whatToExecute = combineCodeBoxWithStrings(realfcond.extraData, realfcond.name + ' = true;', additionalLogData, fcond.name)
 		var ret = 
 		'''
 		
-		Boolean «realfcond.name» = false
+		Boolean «realfcond.name» = false;
 		«IF realfcond.when !== null && realfcond.when.betweenRounds !== null»
 			int «realfcond.name»counter = 0;
 		«ENDIF»
 		«realfcond.where.compile(realfcond.name)»
 			String randomLogData = "";
 			long startTimestamp = System.currentTimeMillis();
-			«realfcond.name» = false
+			«realfcond.name» = false;
 			«IF realfcond.when !== null»
 			«realfcond.when.compile(whatToExecute, realfcond.name, realfcond.name)»
 			«ENDIF»
-			ZermiaRuntime.sendLogs(curNodeName, "«fcond.name»", startTimestamp, randomLogData);
+			ProteusRuntime.sendLogs(curNodeName, "«fcond.name»", startTimestamp, randomLogData);
 		}
 
 		'''
@@ -323,26 +367,28 @@ class AgenGenerator extends AbstractGenerator {
 		'''
 		«IF where.joinType.literal == "Before"»
 		@Before(«where.getName»)
-		public void «where.joinType.literal»«name»(JoinPoint joinPoint) {
-			Object retval = null;
-			Object[] args = joinPoint.getArgs();
+		public void «where.joinType.literal»«name»(JoinPoint joinpoint) {
+			Object retobj = null;
+			Object[] args = joinpoint.getArgs();
 		«ELSE»
-		@AfterReturning( pointcut = «where.getName», returning = "retval")
+		@AfterReturning( pointcut = "«where.getName»", returning = "retobj")
 		public void «where.joinType.literal»«name»(JoinPoint joinpoint, Object retobj) {
-			Object[] args = joinPoint.getArgs();
+			Object[] args = joinpoint.getArgs();
 		«ENDIF»
 	'''
 	}
 
-	def String makeCondFuncs(){
+	def String makeCondFuncs(String nodeName, ArrayList<String> nodeConditions){
 
 		var result = ''
-		var Iterator<Entry<String, String>> condsIt = condsMap.entrySet().iterator();
-		while (condsIt.hasNext()){
-			var Entry<String, String> pair = condsIt.next() as Entry<String, String>;
+		var condsNames = nodeConditions.iterator()
+		//var Iterator<Entry<String, Condition>> condsIt = condsMap.entrySet().iterator();
+		while (condsNames.hasNext()){
+			var condsName = condsNames.next();
+			var condition = condsMap.get(condsName)
 			result += '''
-			private Boolean «pair.getKey()» (Object retval, JoinPoint joinPoint){
-				«pair.getValue()»
+			private Boolean «condition.name» (Object retobj, JoinPoint joinpoint){
+				«condition.compile(nodeName)»
 			}
 			'''
 		}
@@ -352,11 +398,13 @@ class AgenGenerator extends AbstractGenerator {
 	private def compile(What what, String faultName)
 	'''
 	«IF what.codeBlock !== null»
-		«what.codeBlock.compile»
+		«what.codeBlock.compile(faultName)»
 	«ELSEIF what.sleep !== null»
 		«what.sleep.compile»
 	«ELSEIF what.exit !== null»
 		«what.exit.compile(faultName)»
+	«ELSEIF what.cpuLoader !== null»
+		«what.cpuLoader.compile»
 	«ELSEIF what.bigPacketFault !== null»
 		«what.bigPacketFault.compile»
 	«ELSEIF what.leakFault !== null»
@@ -373,68 +421,98 @@ class AgenGenerator extends AbstractGenerator {
 	private def compile(RepeatExecution repeatExecution)
 	'''
 		for(int i=0;i<«repeatExecution.times»;i++){
-			joinpoint.proceed(args);
+			try {
+				joinpoint.proceed(args);
+			} catch (Throwable e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
 		}
 	'''
 		
 	def skipExecutionCompile(String faultName) {
 		'''
-		ZermiaRuntime.sendLogs(curNodeName, "«faultName»", startTimestamp, randomLogData);
+		ProteusRuntime.sendLogs(curNodeName, "«faultName»", startTimestamp, randomLogData);
 		return;
 		'''
 	}
 	
 	private def compile(Sleep sleep)
 	'''
-		Thread.sleep(«sleep.time»);
+		try {
+			Thread.sleep(«sleep.time»);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			System.exit(0);
+		}
 	'''
 
 	private def compile(Exit exit, String faultName)
 	'''
-		ZermiaRuntime.sendLogs(curNodeName, "«faultName»", startTimestamp, randomLogData);
+		ProteusRuntime.sendLogs(curNodeName, "«faultName»", startTimestamp, randomLogData);
 		System.exit(«exit.type»);
+	'''
+	
+	private def compile(CPULoader cpuLoader)
+	'''
+		Thread threadLoad = new PreMadeFaults.ThreadLoad();
+		for(int i=0; i<«cpuLoader.amount»; i++){
+			threadLoad.start();
+			threadLoad = new PreMadeFaults.ThreadLoad();
+		}
 	'''
 
 	private def compile(BigPacketFault bpf)
 	'''
-		premade.bigpacketFault(args[«bpf.originalData»], «bpf.timesLarger»);
+		PreMadeFaults.bigPacketFault(args[«bpf.originalData»], «bpf.timesLarger»);
 	'''
 
 	private def compile(LeakFault lf)
 	'''
-		premade.leakFault(«lf.nrofLeaks»);
+		PreMadeFaults.leakFault(«lf.nrofLeaks»);
 	'''
 
 	private def compile(AlterPacketFault apf)
 	'''
-		premade.alterPacketFault(args[«apf.originalData»], «apf.kindOfAlteration.literal»);
+		PreMadeFaults.alterPacketFault(args[«apf.originalData»], «apf.kindOfAlteration.literal»);
 	'''
 
-	private def compile(CodeBlock cb){
-		return codeBlocksMap.get(cb.getName);
+	private def compile(CodeBlock cb, String faultName){
+		var realcb = codeBlocksMap.get(cb.getName);
+		if (realcb.imports != null) {
+			importsPerFault.get(faultName).add(realcb.imports)
+		}
+		return realcb.code
+	}
+	
+	private def compile(Condition cd, String faultName){
+		if (cd.imports != null) {
+			importsPerFault.get(faultName).add(cd.imports)
+		}
+		return cd.code
 	}
 		
-	def CodeBlock combineCodeBoxes(CodeBlock first, CodeBlock second){
+	def CodeBlock combineCodeBoxes(CodeBlock first, CodeBlock second, String faultName){
 		if (first===null) {
 			return second
 		} else if(second === null){
 			return first
 		} else {
 		//puts the second into the first one and returns it
-		var firstCodeBlock = first.compile.toString()
-		var secondCodeBlock = second.compile.toString()
+		var firstCodeBlock = first.compile(faultName).toString()
+		var secondCodeBlock = second.compile(faultName).toString()
 		first.code = firstCodeBlock.concat(secondCodeBlock)
 		first.name = null
 		return first
 		}
 	}
 	
-	def String combineCodeBoxWithStrings(CodeBlock block, String string1, String string2) {
+	def String combineCodeBoxWithStrings(CodeBlock block, String string1, String string2, String faultName) {
 		var string = string1 + string2
 		if (block === null){
 			return string
 		} else {
-			return block.compile.toString + string
+			return block.compile(faultName).toString() + string
 		}
 	}
 	
@@ -448,7 +526,7 @@ class AgenGenerator extends AbstractGenerator {
 				block.setName("codeBlock"+counter);
 				counter ++;
 			}
-			codeBlocksMap.put(block.getName, block.code);
+			codeBlocksMap.put(block.getName, block);
 		}
 		
         counter=0
@@ -457,7 +535,7 @@ class AgenGenerator extends AbstractGenerator {
 				condition.setName("cond"+counter)
 				counter++
 			}
-			condsMap.put(condition.getName, condition.code);
+			condsMap.put(condition.getName, condition);
 		}
 
 		counter = 0
@@ -468,6 +546,8 @@ class AgenGenerator extends AbstractGenerator {
 					faultCondition.setName('fCond' + counter)
 					counter++
 				}
+				condsPerFault.put(faultCondition.getName, newArrayList)
+				importsPerFault.put(faultCondition.getName, newArrayList)
 				faultCondsMap.put(faultCondition.getName, faultCondition);
 			}
 		}
@@ -486,17 +566,12 @@ class AgenGenerator extends AbstractGenerator {
 		}
 		
 		for(log : resource.allContents.toIterable.filter(Log)){
-			//log.faultCond.extraData = combineCodeBoxes(log.faultCond.extraData, log.extraData)
-			var stateBased = ""
-			var extraData = ""
-			if (log.stateBased!==null) {
-				stateBased = log.stateBased.compile	
-			}
-			if (log.extraData!==null) {
-				extraData = log.extraData.compile
-			}
+			condsPerFault.put(log.getName, newArrayList)
+			importsPerFault.put(log.getName, newArrayList)
 			var logFaultCond = faultCondsMap.get(log.faultCond);
-			logsCompiled.put(log.name, new Pair(stateBased, logFaultCond.compile(extraData)))
+			syncpointsInitialRequest.put(logFaultCond.name, newArrayList)
+			logsMap.put(log.name, log)
+			//log.faultCond.extraData = combineCodeBoxes(log.faultCond.extraData, log.extraData)
 		}
 	}
 	
@@ -511,14 +586,16 @@ class AgenGenerator extends AbstractGenerator {
 		logsCompiled.clear
 		syncpointsInitialRequest.clear
 		faultCondPerFault.clear
+		importsPerFault.clear
+		condsPerFault.clear
 	}
 	
-	def zermiaRuntimeJunction(String firstAttachPoint) {
+	def proteusRuntimeJunction(String firstAttachPoint) {
 		'''
-		@Before("execution (* «firstAttachPoint»*(..))")
-			public void zermiaRuntimeJunction(JoinPoint joinPoint) {
+		@Before("«firstAttachPoint»")
+			public void proteusRuntimeJunction(JoinPoint joinpoint) {
 		        try {
-		            ZermiaRuntime.makeInitialConnection(curNodeName, nodeLocation, coordinatorLocation, faulty, syncpointsDepend, syncpointsTrigger); //runtime start and initial request
+		            ProteusRuntime.makeInitialConnection(curNodeName, nodeLocation, coordinatorLocation, faulty, syncpointsDepend, syncpointsTrigger); //runtime start and initial request
 		        } catch (Exception e) {
 		            e.printStackTrace();
 		        }
@@ -527,8 +604,9 @@ class AgenGenerator extends AbstractGenerator {
 
 	}
 	
-	def makeHeader(String coordinatorLocation, String nodeLocation, String nodeName, Boolean faulty, ArrayList<String> nodeSyncPointsInitialRequestDependant, ArrayList<String> nodeSyncpointsInitialRequestTrigger) {
+	def makeHeader(String runtimePackage, ArrayList<String> extraImports, String coordinatorLocation, String nodeLocation, String nodeName, Boolean faulty, ArrayList<String> nodeSyncPointsInitialRequestDependant, ArrayList<String> nodeSyncpointsInitialRequestTrigger) {
 		'''
+		«runtimePackage»
 		import org.aspectj.lang.JoinPoint;
 		import org.aspectj.lang.ProceedingJoinPoint;
 		import org.aspectj.lang.annotation.Before;
@@ -537,13 +615,16 @@ class AgenGenerator extends AbstractGenerator {
 		import org.aspectj.lang.annotation.Aspect;
 		import java.security.SecureRandom;
 		
-		import proteus.runtime.proteusRuntime;
-		
+		import client.runtime.ProteusRuntime;
+		«FOR imports: extraImports SEPARATOR '\n'»
+			«imports»
+		«ENDFOR»
+		«IF importsPerFault.get(nodeName) !== null && !importsPerFault.get(nodeName).isEmpty()»
+			«importsPerFault.get(nodeName)»
+		«ENDIF»
 		@Aspect
-		public class AgentInstance {
-			preMadeFaults premade = new PreMadeFaults;
-			sharedFuncs sharedFuncs = new SharedFuncs;
-			randomGen = new SecureRandom();
+		public class «nodeName + 'gen'» {
+			protected static SecureRandom randomGen = new SecureRandom();
 			String coordinatorLocation = "«coordinatorLocation»";
 			String nodeLocation = "«nodeLocation»";
 			String curNodeName = "«nodeName»";
@@ -575,9 +656,10 @@ class AgenGenerator extends AbstractGenerator {
 		      randomGen = new SecureRandom();
 		  }
 
-		  public byte[] bigPacketFault(byte[] data, Integer timesLarger) {
-		    Integer lenghtD = data.length * timesLarger;
-		    Integer iterator = data.length;
+		  public byte[] static bigPacketFault(Object data, Integer timesLarger) {
+			byte[] dataBytes = (byte[]) data;
+		    Integer lenghtD = dataBytes.length * timesLarger;
+		    Integer iterator = dataBytes.length;
 		    byte[] dataR = new byte[lenghtD];
 		    for(int i=0; i<lenghtD; i=i+iterator) {
 		      System.arraycopy(data, 0, dataR, i, data.length);
@@ -585,22 +667,23 @@ class AgenGenerator extends AbstractGenerator {
 		    return dataR;
 		  }
 
-		  public byte[] alterPacketFault(byte[] data, String kind) {
+		  public byte[] static alterPacketFault(Object data, String kind) {
+			byte[] dataBytes = (byte[]) data;
 		    Integer testR;
-		    if(kind.equals('random')){
-		      for (int i = 0; i < data.length; i++) {
+		    if(kind.equals("random")){
+		      for (int i = 0; i < dataBytes.length; i++) {
 		        testR = randomGen.nextInt(126);
-		        data[i] = testR.byteValue();
+		        dataBytes[i] = testR.byteValue();
 		      }
 		    } else {
-		      for (int i = 0; i < data.length; i++) {
-		        data[i] = 0;
+		      for (int i = 0; i < dataBytes.length; i++) {
+		    	  dataBytes[i] = 0;
 		      }
 		    }
-		    return data;
+		    return dataBytes;
 		  }
 
-		  public void stackLeakFault(Integer numberOfLeaks) {
+		  public void static stackLeakFault(Integer numberOfLeaks) {
 		    Integer leakSize = 1024 * 1024 * 30; //small leaks 30mbytes
 		    List<byte[]> leakList = new ArrayList<>();
 		    byte[] leak = new byte[leakSize];
@@ -611,9 +694,21 @@ class AgenGenerator extends AbstractGenerator {
 		    long allocatedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory());
 		    long presumableFreeMemory = Runtime.getRuntime().maxMemory() - allocatedMemory;
 		    System.out.println("Memory left " + presumableFreeMemory);
-
 		    leakList.clear();
 		  }
+		  
+		    class threadLoad implements Runnable{
+		  	@Override
+		  	public void run(){  //needed for fault load, just throw anything to make some cpu waste
+		  		while(true) {
+		  			Integer wasting = 2;
+		  			Integer twaste = 1024*1024*1024;
+		  			while(wasting<twaste) {
+		  				wasting = wasting * 2;
+		  			}
+		  		}
+		  	}
+		    }
 
 		}
 

@@ -30,6 +30,7 @@ import org.xtext.agen.RunConfiguration;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.xtext.agen.impl.RunConfigurationImpl#getRuntimePackage <em>Runtime Package</em>}</li>
  *   <li>{@link org.xtext.agen.impl.RunConfigurationImpl#getCoordinatorLocation <em>Coordinator Location</em>}</li>
  *   <li>{@link org.xtext.agen.impl.RunConfigurationImpl#getNodes <em>Nodes</em>}</li>
  * </ul>
@@ -38,6 +39,26 @@ import org.xtext.agen.RunConfiguration;
  */
 public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
 {
+  /**
+   * The default value of the '{@link #getRuntimePackage() <em>Runtime Package</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRuntimePackage()
+   * @generated
+   * @ordered
+   */
+  protected static final String RUNTIME_PACKAGE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getRuntimePackage() <em>Runtime Package</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getRuntimePackage()
+   * @generated
+   * @ordered
+   */
+  protected String runtimePackage = RUNTIME_PACKAGE_EDEFAULT;
+
   /**
    * The default value of the '{@link #getCoordinatorLocation() <em>Coordinator Location</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -87,6 +108,31 @@ public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
   protected EClass eStaticClass()
   {
     return AgenPackage.Literals.RUN_CONFIGURATION;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String getRuntimePackage()
+  {
+    return runtimePackage;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public void setRuntimePackage(String newRuntimePackage)
+  {
+    String oldRuntimePackage = runtimePackage;
+    runtimePackage = newRuntimePackage;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, AgenPackage.RUN_CONFIGURATION__RUNTIME_PACKAGE, oldRuntimePackage, runtimePackage));
   }
 
   /**
@@ -155,6 +201,8 @@ public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
   {
     switch (featureID)
     {
+      case AgenPackage.RUN_CONFIGURATION__RUNTIME_PACKAGE:
+        return getRuntimePackage();
       case AgenPackage.RUN_CONFIGURATION__COORDINATOR_LOCATION:
         return getCoordinatorLocation();
       case AgenPackage.RUN_CONFIGURATION__NODES:
@@ -174,6 +222,9 @@ public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
   {
     switch (featureID)
     {
+      case AgenPackage.RUN_CONFIGURATION__RUNTIME_PACKAGE:
+        setRuntimePackage((String)newValue);
+        return;
       case AgenPackage.RUN_CONFIGURATION__COORDINATOR_LOCATION:
         setCoordinatorLocation((String)newValue);
         return;
@@ -195,6 +246,9 @@ public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
   {
     switch (featureID)
     {
+      case AgenPackage.RUN_CONFIGURATION__RUNTIME_PACKAGE:
+        setRuntimePackage(RUNTIME_PACKAGE_EDEFAULT);
+        return;
       case AgenPackage.RUN_CONFIGURATION__COORDINATOR_LOCATION:
         setCoordinatorLocation(COORDINATOR_LOCATION_EDEFAULT);
         return;
@@ -215,6 +269,8 @@ public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
   {
     switch (featureID)
     {
+      case AgenPackage.RUN_CONFIGURATION__RUNTIME_PACKAGE:
+        return RUNTIME_PACKAGE_EDEFAULT == null ? runtimePackage != null : !RUNTIME_PACKAGE_EDEFAULT.equals(runtimePackage);
       case AgenPackage.RUN_CONFIGURATION__COORDINATOR_LOCATION:
         return COORDINATOR_LOCATION_EDEFAULT == null ? coordinatorLocation != null : !COORDINATOR_LOCATION_EDEFAULT.equals(coordinatorLocation);
       case AgenPackage.RUN_CONFIGURATION__NODES:
@@ -234,7 +290,9 @@ public class RunConfigurationImpl extends TypesImpl implements RunConfiguration
     if (eIsProxy()) return super.toString();
 
     StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (CoordinatorLocation: ");
+    result.append(" (runtimePackage: ");
+    result.append(runtimePackage);
+    result.append(", coordinatorLocation: ");
     result.append(coordinatorLocation);
     result.append(')');
     return result.toString();

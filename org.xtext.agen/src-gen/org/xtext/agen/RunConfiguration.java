@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.xtext.agen.RunConfiguration#getRuntimePackage <em>Runtime Package</em>}</li>
  *   <li>{@link org.xtext.agen.RunConfiguration#getCoordinatorLocation <em>Coordinator Location</em>}</li>
  *   <li>{@link org.xtext.agen.RunConfiguration#getNodes <em>Nodes</em>}</li>
  * </ul>
@@ -24,6 +25,28 @@ import org.eclipse.emf.common.util.EList;
  */
 public interface RunConfiguration extends Types
 {
+  /**
+   * Returns the value of the '<em><b>Runtime Package</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Runtime Package</em>' attribute.
+   * @see #setRuntimePackage(String)
+   * @see org.xtext.agen.AgenPackage#getRunConfiguration_RuntimePackage()
+   * @model
+   * @generated
+   */
+  String getRuntimePackage();
+
+  /**
+   * Sets the value of the '{@link org.xtext.agen.RunConfiguration#getRuntimePackage <em>Runtime Package</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Runtime Package</em>' attribute.
+   * @see #getRuntimePackage()
+   * @generated
+   */
+  void setRuntimePackage(String value);
+
   /**
    * Returns the value of the '<em><b>Coordinator Location</b></em>' attribute.
    * <!-- begin-user-doc -->

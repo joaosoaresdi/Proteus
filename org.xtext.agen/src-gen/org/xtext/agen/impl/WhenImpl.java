@@ -19,7 +19,6 @@ import org.xtext.agen.Random;
 import org.xtext.agen.When;
 import org.xtext.agen.betweenRounds;
 import org.xtext.agen.betweenSeconds;
-import org.xtext.agen.randomBetweenRound;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +31,6 @@ import org.xtext.agen.randomBetweenRound;
  *   <li>{@link org.xtext.agen.impl.WhenImpl#getBetweenRounds <em>Between Rounds</em>}</li>
  *   <li>{@link org.xtext.agen.impl.WhenImpl#getBetweenSeconds <em>Between Seconds</em>}</li>
  *   <li>{@link org.xtext.agen.impl.WhenImpl#getRandom <em>Random</em>}</li>
- *   <li>{@link org.xtext.agen.impl.WhenImpl#getRandomBetweenRound <em>Random Between Round</em>}</li>
  *   <li>{@link org.xtext.agen.impl.WhenImpl#getIfCondition <em>If Condition</em>}</li>
  *   <li>{@link org.xtext.agen.impl.WhenImpl#getFaultCond <em>Fault Cond</em>}</li>
  *   <li>{@link org.xtext.agen.impl.WhenImpl#getSyncpoint <em>Syncpoint</em>}</li>
@@ -71,16 +69,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
    * @ordered
    */
   protected Random random;
-
-  /**
-   * The cached value of the '{@link #getRandomBetweenRound() <em>Random Between Round</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getRandomBetweenRound()
-   * @generated
-   * @ordered
-   */
-  protected randomBetweenRound randomBetweenRound;
 
   /**
    * The cached value of the '{@link #getIfCondition() <em>If Condition</em>}' containment reference.
@@ -299,56 +287,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
    * @generated
    */
   @Override
-  public randomBetweenRound getRandomBetweenRound()
-  {
-    return randomBetweenRound;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public NotificationChain basicSetRandomBetweenRound(randomBetweenRound newRandomBetweenRound, NotificationChain msgs)
-  {
-    randomBetweenRound oldRandomBetweenRound = randomBetweenRound;
-    randomBetweenRound = newRandomBetweenRound;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, AgenPackage.WHEN__RANDOM_BETWEEN_ROUND, oldRandomBetweenRound, newRandomBetweenRound);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public void setRandomBetweenRound(randomBetweenRound newRandomBetweenRound)
-  {
-    if (newRandomBetweenRound != randomBetweenRound)
-    {
-      NotificationChain msgs = null;
-      if (randomBetweenRound != null)
-        msgs = ((InternalEObject)randomBetweenRound).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - AgenPackage.WHEN__RANDOM_BETWEEN_ROUND, null, msgs);
-      if (newRandomBetweenRound != null)
-        msgs = ((InternalEObject)newRandomBetweenRound).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - AgenPackage.WHEN__RANDOM_BETWEEN_ROUND, null, msgs);
-      msgs = basicSetRandomBetweenRound(newRandomBetweenRound, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, AgenPackage.WHEN__RANDOM_BETWEEN_ROUND, newRandomBetweenRound, newRandomBetweenRound));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public Condition getIfCondition()
   {
     return ifCondition;
@@ -484,8 +422,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
         return basicSetBetweenSeconds(null, msgs);
       case AgenPackage.WHEN__RANDOM:
         return basicSetRandom(null, msgs);
-      case AgenPackage.WHEN__RANDOM_BETWEEN_ROUND:
-        return basicSetRandomBetweenRound(null, msgs);
       case AgenPackage.WHEN__IF_CONDITION:
         return basicSetIfCondition(null, msgs);
       case AgenPackage.WHEN__FAULT_COND:
@@ -510,8 +446,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
         return getBetweenSeconds();
       case AgenPackage.WHEN__RANDOM:
         return getRandom();
-      case AgenPackage.WHEN__RANDOM_BETWEEN_ROUND:
-        return getRandomBetweenRound();
       case AgenPackage.WHEN__IF_CONDITION:
         return getIfCondition();
       case AgenPackage.WHEN__FAULT_COND:
@@ -540,9 +474,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
         return;
       case AgenPackage.WHEN__RANDOM:
         setRandom((Random)newValue);
-        return;
-      case AgenPackage.WHEN__RANDOM_BETWEEN_ROUND:
-        setRandomBetweenRound((randomBetweenRound)newValue);
         return;
       case AgenPackage.WHEN__IF_CONDITION:
         setIfCondition((Condition)newValue);
@@ -576,9 +507,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
       case AgenPackage.WHEN__RANDOM:
         setRandom((Random)null);
         return;
-      case AgenPackage.WHEN__RANDOM_BETWEEN_ROUND:
-        setRandomBetweenRound((randomBetweenRound)null);
-        return;
       case AgenPackage.WHEN__IF_CONDITION:
         setIfCondition((Condition)null);
         return;
@@ -608,8 +536,6 @@ public class WhenImpl extends MinimalEObjectImpl.Container implements When
         return betweenSeconds != null;
       case AgenPackage.WHEN__RANDOM:
         return random != null;
-      case AgenPackage.WHEN__RANDOM_BETWEEN_ROUND:
-        return randomBetweenRound != null;
       case AgenPackage.WHEN__IF_CONDITION:
         return ifCondition != null;
       case AgenPackage.WHEN__FAULT_COND:

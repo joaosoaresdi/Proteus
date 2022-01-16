@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import agen.server.serverMain;
-import zermia.proto.ProtoRuntime.Syncpoint;
+import agen.proto.ProtoRuntime.Syncpoint;
 
 public class SyncpointObj {
 	String syncpointName;
@@ -27,8 +27,8 @@ public class SyncpointObj {
 		serverMain.faultCondToSyncpoint.get(syncpoint.getFaultCondName()).add(syncpoint.getName());
 	}
 	
-	public void registerSyncpoint(String nodeName, zermia.proto.ProtoRuntime.Syncpoint syncpoint) {
-		if(syncpoint.getNodeType().equals(zermia.proto.ProtoRuntime.Syncpoint.nodetype.trigger)) {
+	public void registerSyncpoint(String nodeName, agen.proto.ProtoRuntime.Syncpoint syncpoint) {
+		if(syncpoint.getNodeType().equals(agen.proto.ProtoRuntime.Syncpoint.nodetype.trigger)) {
 			triggers.put(nodeName, 0);
 			serverMain.faultCondToSyncpoint.get(syncpoint.getFaultCondName()).add(syncpoint.getName());
 		} else {
@@ -54,7 +54,7 @@ public class SyncpointObj {
 		}
 		//since there are only two types from here is the else
 		int dependantsValue = dependants.get(nodeName);
-		if(dependantsValue<=triggerMinValue) {
+		if(dependantsValue<triggerMinValue) {
 			dependants.replace(nodeName, dependantsValue+1);
 			return true;
 		} else {

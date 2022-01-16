@@ -186,11 +186,6 @@ public class AgenAdapterFactory extends AdapterFactoryImpl
         return createbetweenRoundsAdapter();
       }
       @Override
-      public Adapter caserandomBetweenRound(randomBetweenRound object)
-      {
-        return createrandomBetweenRoundAdapter();
-      }
-      @Override
       public Adapter caseCondition(Condition object)
       {
         return createConditionAdapter();
@@ -548,21 +543,6 @@ public class AgenAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createbetweenRoundsAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.xtext.agen.randomBetweenRound <em>random Between Round</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.xtext.agen.randomBetweenRound
-   * @generated
-   */
-  public Adapter createrandomBetweenRoundAdapter()
   {
     return null;
   }

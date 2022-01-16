@@ -88,7 +88,6 @@ public class AgenFactoryImpl extends EFactoryImpl implements AgenFactory
       case AgenPackage.RANDOM: return createRandom();
       case AgenPackage.BETWEEN_SECONDS: return createbetweenSeconds();
       case AgenPackage.BETWEEN_ROUNDS: return createbetweenRounds();
-      case AgenPackage.RANDOM_BETWEEN_ROUND: return createrandomBetweenRound();
       case AgenPackage.CONDITION: return createCondition();
       case AgenPackage.WHERE: return createWhere();
       default:
@@ -404,18 +403,6 @@ public class AgenFactoryImpl extends EFactoryImpl implements AgenFactory
   {
     betweenRoundsImpl betweenRounds = new betweenRoundsImpl();
     return betweenRounds;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public randomBetweenRound createrandomBetweenRound()
-  {
-    randomBetweenRoundImpl randomBetweenRound = new randomBetweenRoundImpl();
-    return randomBetweenRound;
   }
 
   /**

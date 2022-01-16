@@ -116,13 +116,22 @@ public interface AgenPackage extends EPackage
   int RUN_CONFIGURATION = 2;
 
   /**
+   * The feature id for the '<em><b>Runtime Package</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int RUN_CONFIGURATION__RUNTIME_PACKAGE = TYPES_FEATURE_COUNT + 0;
+
+  /**
    * The feature id for the '<em><b>Coordinator Location</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int RUN_CONFIGURATION__COORDINATOR_LOCATION = TYPES_FEATURE_COUNT + 0;
+  int RUN_CONFIGURATION__COORDINATOR_LOCATION = TYPES_FEATURE_COUNT + 1;
 
   /**
    * The feature id for the '<em><b>Nodes</b></em>' containment reference list.
@@ -131,7 +140,7 @@ public interface AgenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RUN_CONFIGURATION__NODES = TYPES_FEATURE_COUNT + 1;
+  int RUN_CONFIGURATION__NODES = TYPES_FEATURE_COUNT + 2;
 
   /**
    * The number of structural features of the '<em>Run Configuration</em>' class.
@@ -140,7 +149,7 @@ public interface AgenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int RUN_CONFIGURATION_FEATURE_COUNT = TYPES_FEATURE_COUNT + 2;
+  int RUN_CONFIGURATION_FEATURE_COUNT = TYPES_FEATURE_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.xtext.agen.impl.NodeImpl <em>Node</em>}' class.
@@ -879,22 +888,13 @@ public interface AgenPackage extends EPackage
   int WHEN__RANDOM = 2;
 
   /**
-   * The feature id for the '<em><b>Random Between Round</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int WHEN__RANDOM_BETWEEN_ROUND = 3;
-
-  /**
    * The feature id for the '<em><b>If Condition</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WHEN__IF_CONDITION = 4;
+  int WHEN__IF_CONDITION = 3;
 
   /**
    * The feature id for the '<em><b>Fault Cond</b></em>' containment reference.
@@ -903,7 +903,7 @@ public interface AgenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WHEN__FAULT_COND = 5;
+  int WHEN__FAULT_COND = 4;
 
   /**
    * The feature id for the '<em><b>Syncpoint</b></em>' attribute.
@@ -912,7 +912,7 @@ public interface AgenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WHEN__SYNCPOINT = 6;
+  int WHEN__SYNCPOINT = 5;
 
   /**
    * The number of structural features of the '<em>When</em>' class.
@@ -921,7 +921,7 @@ public interface AgenPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WHEN_FEATURE_COUNT = 7;
+  int WHEN_FEATURE_COUNT = 6;
 
   /**
    * The meta object id for the '{@link org.xtext.agen.impl.RandomImpl <em>Random</em>}' class.
@@ -1053,61 +1053,6 @@ public interface AgenPackage extends EPackage
   int BETWEEN_ROUNDS_FEATURE_COUNT = 5;
 
   /**
-   * The meta object id for the '{@link org.xtext.agen.impl.randomBetweenRoundImpl <em>random Between Round</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.xtext.agen.impl.randomBetweenRoundImpl
-   * @see org.xtext.agen.impl.AgenPackageImpl#getrandomBetweenRound()
-   * @generated
-   */
-  int RANDOM_BETWEEN_ROUND = 22;
-
-  /**
-   * The feature id for the '<em><b>Start</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RANDOM_BETWEEN_ROUND__START = 0;
-
-  /**
-   * The feature id for the '<em><b>End</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RANDOM_BETWEEN_ROUND__END = 1;
-
-  /**
-   * The feature id for the '<em><b>Interval</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RANDOM_BETWEEN_ROUND__INTERVAL = 2;
-
-  /**
-   * The feature id for the '<em><b>Chance</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RANDOM_BETWEEN_ROUND__CHANCE = 3;
-
-  /**
-   * The number of structural features of the '<em>random Between Round</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int RANDOM_BETWEEN_ROUND_FEATURE_COUNT = 4;
-
-  /**
    * The meta object id for the '{@link org.xtext.agen.impl.ConditionImpl <em>Condition</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1115,7 +1060,7 @@ public interface AgenPackage extends EPackage
    * @see org.xtext.agen.impl.AgenPackageImpl#getCondition()
    * @generated
    */
-  int CONDITION = 23;
+  int CONDITION = 22;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1161,7 +1106,7 @@ public interface AgenPackage extends EPackage
    * @see org.xtext.agen.impl.AgenPackageImpl#getWhere()
    * @generated
    */
-  int WHERE = 24;
+  int WHERE = 23;
 
   /**
    * The feature id for the '<em><b>Join Type</b></em>' attribute.
@@ -1198,7 +1143,7 @@ public interface AgenPackage extends EPackage
    * @see org.xtext.agen.impl.AgenPackageImpl#getsyncpointOnFail()
    * @generated
    */
-  int SYNCPOINT_ON_FAIL = 25;
+  int SYNCPOINT_ON_FAIL = 24;
 
   /**
    * The meta object id for the '{@link org.xtext.agen.syncpointType <em>syncpoint Type</em>}' enum.
@@ -1208,7 +1153,7 @@ public interface AgenPackage extends EPackage
    * @see org.xtext.agen.impl.AgenPackageImpl#getsyncpointType()
    * @generated
    */
-  int SYNCPOINT_TYPE = 26;
+  int SYNCPOINT_TYPE = 25;
 
   /**
    * The meta object id for the '{@link org.xtext.agen.AlterPacketFaultType <em>Alter Packet Fault Type</em>}' enum.
@@ -1218,7 +1163,7 @@ public interface AgenPackage extends EPackage
    * @see org.xtext.agen.impl.AgenPackageImpl#getAlterPacketFaultType()
    * @generated
    */
-  int ALTER_PACKET_FAULT_TYPE = 27;
+  int ALTER_PACKET_FAULT_TYPE = 26;
 
   /**
    * The meta object id for the '{@link org.xtext.agen.JOIN_TYPE <em>JOIN TYPE</em>}' enum.
@@ -1228,7 +1173,7 @@ public interface AgenPackage extends EPackage
    * @see org.xtext.agen.impl.AgenPackageImpl#getJOIN_TYPE()
    * @generated
    */
-  int JOIN_TYPE = 28;
+  int JOIN_TYPE = 27;
 
 
   /**
@@ -1271,6 +1216,17 @@ public interface AgenPackage extends EPackage
    * @generated
    */
   EClass getRunConfiguration();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.xtext.agen.RunConfiguration#getRuntimePackage <em>Runtime Package</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Runtime Package</em>'.
+   * @see org.xtext.agen.RunConfiguration#getRuntimePackage()
+   * @see #getRunConfiguration()
+   * @generated
+   */
+  EAttribute getRunConfiguration_RuntimePackage();
 
   /**
    * Returns the meta object for the attribute '{@link org.xtext.agen.RunConfiguration#getCoordinatorLocation <em>Coordinator Location</em>}'.
@@ -1994,17 +1950,6 @@ public interface AgenPackage extends EPackage
   EReference getWhen_Random();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.xtext.agen.When#getRandomBetweenRound <em>Random Between Round</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Random Between Round</em>'.
-   * @see org.xtext.agen.When#getRandomBetweenRound()
-   * @see #getWhen()
-   * @generated
-   */
-  EReference getWhen_RandomBetweenRound();
-
-  /**
    * Returns the meta object for the containment reference '{@link org.xtext.agen.When#getIfCondition <em>If Condition</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -2154,60 +2099,6 @@ public interface AgenPackage extends EPackage
    * @generated
    */
   EReference getbetweenRounds_Random();
-
-  /**
-   * Returns the meta object for class '{@link org.xtext.agen.randomBetweenRound <em>random Between Round</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>random Between Round</em>'.
-   * @see org.xtext.agen.randomBetweenRound
-   * @generated
-   */
-  EClass getrandomBetweenRound();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.xtext.agen.randomBetweenRound#getStart <em>Start</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Start</em>'.
-   * @see org.xtext.agen.randomBetweenRound#getStart()
-   * @see #getrandomBetweenRound()
-   * @generated
-   */
-  EAttribute getrandomBetweenRound_Start();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.xtext.agen.randomBetweenRound#getEnd <em>End</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>End</em>'.
-   * @see org.xtext.agen.randomBetweenRound#getEnd()
-   * @see #getrandomBetweenRound()
-   * @generated
-   */
-  EAttribute getrandomBetweenRound_End();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.xtext.agen.randomBetweenRound#getInterval <em>Interval</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Interval</em>'.
-   * @see org.xtext.agen.randomBetweenRound#getInterval()
-   * @see #getrandomBetweenRound()
-   * @generated
-   */
-  EAttribute getrandomBetweenRound_Interval();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.xtext.agen.randomBetweenRound#getChance <em>Chance</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Chance</em>'.
-   * @see org.xtext.agen.randomBetweenRound#getChance()
-   * @see #getrandomBetweenRound()
-   * @generated
-   */
-  EAttribute getrandomBetweenRound_Chance();
 
   /**
    * Returns the meta object for class '{@link org.xtext.agen.Condition <em>Condition</em>}'.
@@ -2384,6 +2275,14 @@ public interface AgenPackage extends EPackage
      * @generated
      */
     EClass RUN_CONFIGURATION = eINSTANCE.getRunConfiguration();
+
+    /**
+     * The meta object literal for the '<em><b>Runtime Package</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute RUN_CONFIGURATION__RUNTIME_PACKAGE = eINSTANCE.getRunConfiguration_RuntimePackage();
 
     /**
      * The meta object literal for the '<em><b>Coordinator Location</b></em>' attribute feature.
@@ -2954,14 +2853,6 @@ public interface AgenPackage extends EPackage
     EReference WHEN__RANDOM = eINSTANCE.getWhen_Random();
 
     /**
-     * The meta object literal for the '<em><b>Random Between Round</b></em>' containment reference feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference WHEN__RANDOM_BETWEEN_ROUND = eINSTANCE.getWhen_RandomBetweenRound();
-
-    /**
      * The meta object literal for the '<em><b>If Condition</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -3078,48 +2969,6 @@ public interface AgenPackage extends EPackage
      * @generated
      */
     EReference BETWEEN_ROUNDS__RANDOM = eINSTANCE.getbetweenRounds_Random();
-
-    /**
-     * The meta object literal for the '{@link org.xtext.agen.impl.randomBetweenRoundImpl <em>random Between Round</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.xtext.agen.impl.randomBetweenRoundImpl
-     * @see org.xtext.agen.impl.AgenPackageImpl#getrandomBetweenRound()
-     * @generated
-     */
-    EClass RANDOM_BETWEEN_ROUND = eINSTANCE.getrandomBetweenRound();
-
-    /**
-     * The meta object literal for the '<em><b>Start</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute RANDOM_BETWEEN_ROUND__START = eINSTANCE.getrandomBetweenRound_Start();
-
-    /**
-     * The meta object literal for the '<em><b>End</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute RANDOM_BETWEEN_ROUND__END = eINSTANCE.getrandomBetweenRound_End();
-
-    /**
-     * The meta object literal for the '<em><b>Interval</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute RANDOM_BETWEEN_ROUND__INTERVAL = eINSTANCE.getrandomBetweenRound_Interval();
-
-    /**
-     * The meta object literal for the '<em><b>Chance</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute RANDOM_BETWEEN_ROUND__CHANCE = eINSTANCE.getrandomBetweenRound_Chance();
 
     /**
      * The meta object literal for the '{@link org.xtext.agen.impl.ConditionImpl <em>Condition</em>}' class.

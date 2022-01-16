@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import zermia.proto.ProtoRuntime.Log;
-import zermia.proto.ProtoRuntime.Syncpoint;
+import agen.proto.ProtoRuntime.Log;
+import agen.proto.ProtoRuntime.Syncpoint;
 
 public class Node {
 	String nodeName;

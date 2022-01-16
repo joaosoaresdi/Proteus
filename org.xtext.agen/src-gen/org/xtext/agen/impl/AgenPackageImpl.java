@@ -38,7 +38,6 @@ import org.xtext.agen.When;
 import org.xtext.agen.Where;
 import org.xtext.agen.betweenRounds;
 import org.xtext.agen.betweenSeconds;
-import org.xtext.agen.randomBetweenRound;
 import org.xtext.agen.syncpointOnFail;
 import org.xtext.agen.syncpointType;
 
@@ -209,13 +208,6 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass randomBetweenRoundEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   private EClass conditionEClass = null;
 
   /**
@@ -366,7 +358,7 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
    * @generated
    */
   @Override
-  public EAttribute getRunConfiguration_CoordinatorLocation()
+  public EAttribute getRunConfiguration_RuntimePackage()
   {
     return (EAttribute)runConfigurationEClass.getEStructuralFeatures().get(0);
   }
@@ -377,9 +369,20 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
    * @generated
    */
   @Override
+  public EAttribute getRunConfiguration_CoordinatorLocation()
+  {
+    return (EAttribute)runConfigurationEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
   public EReference getRunConfiguration_Nodes()
   {
-    return (EReference)runConfigurationEClass.getEStructuralFeatures().get(1);
+    return (EReference)runConfigurationEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -1103,7 +1106,7 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
    * @generated
    */
   @Override
-  public EReference getWhen_RandomBetweenRound()
+  public EReference getWhen_IfCondition()
   {
     return (EReference)whenEClass.getEStructuralFeatures().get(3);
   }
@@ -1114,7 +1117,7 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
    * @generated
    */
   @Override
-  public EReference getWhen_IfCondition()
+  public EReference getWhen_FaultCond()
   {
     return (EReference)whenEClass.getEStructuralFeatures().get(4);
   }
@@ -1125,20 +1128,9 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
    * @generated
    */
   @Override
-  public EReference getWhen_FaultCond()
-  {
-    return (EReference)whenEClass.getEStructuralFeatures().get(5);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
   public EAttribute getWhen_Syncpoint()
   {
-    return (EAttribute)whenEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)whenEClass.getEStructuralFeatures().get(5);
   }
 
   /**
@@ -1260,61 +1252,6 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
   public EReference getbetweenRounds_Random()
   {
     return (EReference)betweenRoundsEClass.getEStructuralFeatures().get(4);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EClass getrandomBetweenRound()
-  {
-    return randomBetweenRoundEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getrandomBetweenRound_Start()
-  {
-    return (EAttribute)randomBetweenRoundEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getrandomBetweenRound_End()
-  {
-    return (EAttribute)randomBetweenRoundEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getrandomBetweenRound_Interval()
-  {
-    return (EAttribute)randomBetweenRoundEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public EAttribute getrandomBetweenRound_Chance()
-  {
-    return (EAttribute)randomBetweenRoundEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -1475,6 +1412,7 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
     typesEClass = createEClass(TYPES);
 
     runConfigurationEClass = createEClass(RUN_CONFIGURATION);
+    createEAttribute(runConfigurationEClass, RUN_CONFIGURATION__RUNTIME_PACKAGE);
     createEAttribute(runConfigurationEClass, RUN_CONFIGURATION__COORDINATOR_LOCATION);
     createEReference(runConfigurationEClass, RUN_CONFIGURATION__NODES);
 
@@ -1558,7 +1496,6 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
     createEReference(whenEClass, WHEN__BETWEEN_ROUNDS);
     createEReference(whenEClass, WHEN__BETWEEN_SECONDS);
     createEReference(whenEClass, WHEN__RANDOM);
-    createEReference(whenEClass, WHEN__RANDOM_BETWEEN_ROUND);
     createEReference(whenEClass, WHEN__IF_CONDITION);
     createEReference(whenEClass, WHEN__FAULT_COND);
     createEAttribute(whenEClass, WHEN__SYNCPOINT);
@@ -1576,12 +1513,6 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
     createEAttribute(betweenRoundsEClass, BETWEEN_ROUNDS__INTERVAL);
     createEReference(betweenRoundsEClass, BETWEEN_ROUNDS__CONDITION);
     createEReference(betweenRoundsEClass, BETWEEN_ROUNDS__RANDOM);
-
-    randomBetweenRoundEClass = createEClass(RANDOM_BETWEEN_ROUND);
-    createEAttribute(randomBetweenRoundEClass, RANDOM_BETWEEN_ROUND__START);
-    createEAttribute(randomBetweenRoundEClass, RANDOM_BETWEEN_ROUND__END);
-    createEAttribute(randomBetweenRoundEClass, RANDOM_BETWEEN_ROUND__INTERVAL);
-    createEAttribute(randomBetweenRoundEClass, RANDOM_BETWEEN_ROUND__CHANCE);
 
     conditionEClass = createEClass(CONDITION);
     createEAttribute(conditionEClass, CONDITION__NAME);
@@ -1644,7 +1575,8 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
     initEClass(typesEClass, Types.class, "Types", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(runConfigurationEClass, RunConfiguration.class, "RunConfiguration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getRunConfiguration_CoordinatorLocation(), ecorePackage.getEString(), "CoordinatorLocation", null, 0, 1, RunConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRunConfiguration_RuntimePackage(), ecorePackage.getEString(), "runtimePackage", null, 0, 1, RunConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getRunConfiguration_CoordinatorLocation(), ecorePackage.getEString(), "coordinatorLocation", null, 0, 1, RunConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getRunConfiguration_Nodes(), this.getNode(), null, "nodes", null, 0, -1, RunConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(nodeEClass, Node.class, "Node", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1727,7 +1659,6 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
     initEReference(getWhen_BetweenRounds(), this.getbetweenRounds(), null, "betweenRounds", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWhen_BetweenSeconds(), this.getbetweenSeconds(), null, "betweenSeconds", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWhen_Random(), this.getRandom(), null, "random", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getWhen_RandomBetweenRound(), this.getrandomBetweenRound(), null, "randomBetweenRound", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWhen_IfCondition(), this.getCondition(), null, "ifCondition", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWhen_FaultCond(), this.getFaultCond(), null, "faultCond", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getWhen_Syncpoint(), ecorePackage.getEString(), "syncpoint", null, 0, 1, When.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1745,12 +1676,6 @@ public class AgenPackageImpl extends EPackageImpl implements AgenPackage
     initEAttribute(getbetweenRounds_Interval(), ecorePackage.getEInt(), "interval", null, 0, 1, betweenRounds.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getbetweenRounds_Condition(), this.getCondition(), null, "condition", null, 0, 1, betweenRounds.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getbetweenRounds_Random(), this.getRandom(), null, "random", null, 0, 1, betweenRounds.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    initEClass(randomBetweenRoundEClass, randomBetweenRound.class, "randomBetweenRound", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getrandomBetweenRound_Start(), ecorePackage.getEInt(), "start", null, 0, 1, randomBetweenRound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getrandomBetweenRound_End(), ecorePackage.getEInt(), "end", null, 0, 1, randomBetweenRound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getrandomBetweenRound_Interval(), ecorePackage.getEInt(), "interval", null, 0, 1, randomBetweenRound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getrandomBetweenRound_Chance(), ecorePackage.getEInt(), "chance", null, 0, 1, randomBetweenRound.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(conditionEClass, Condition.class, "Condition", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getCondition_Name(), ecorePackage.getEString(), "name", null, 0, 1, Condition.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

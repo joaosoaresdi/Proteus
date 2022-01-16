@@ -11,7 +11,7 @@ Types:
 ;
 
 RunConfiguration:
-	'RunConfiguration' '{' 'CoordinatorLocation' '=' CoordinatorLocation = STRING ';' nodes+=(Node)* '}'
+	'RunConfiguration' '{' 'RuntimePackage' '=' runtimePackage = STRING ';' 'CoordinatorLocation' '=' coordinatorLocation = STRING ';' nodes+=(Node)* '}'
 ;
 
 Node:
@@ -23,7 +23,7 @@ Log:
 ;
 
 Syncpoint:
-	'Syncpoint' name=ID '(' nodesDependant+=ID* ';' 'type' '=' type=syncpointType ';' 'onFailure' '=' onFail=syncpointOnFail ';' 'faultCond' '=' faultCond=FaultCond ')'
+	'Syncpoint' name=ID '(' nodesDependant+=ID* ';' 'type' '=' type=syncpointType ';' 'onFailure' '=' onFail=syncpointOnFail ';' faultCond=FaultCond ')'
 ;
 
 enum syncpointOnFail:
@@ -83,15 +83,15 @@ CPULoader:
 ;
 
 CodeBlock:
-	('BlockID' '(' name=ID ')') | ('CodeBlock' (name=ID)? '{' ('imports' '{' imports=CODE_BOX '}' ',' 'code' '{')? code=CODE_BOX '}')
+	('BlockID' '(' name=ID ')') | ('CodeBlock' (name=ID)? '{' (('imports' '{' imports=CODE_BOX '}' ';' 'code' '{' code=CODE_BOX '}''}')|( code=CODE_BOX '}')))
 ;
 
 FaultCond:
-	('FaultCond' name=ID) | ('FaultCond' (name=ID)? '{' where=Where ';' ('whenToIncrement{' when=When '}')? (extraData=CodeBlock)? '}')
+	('FaultCond' name=ID) | ('FaultCond' (name=ID)? '{' where=Where ';' ('whenToIncrement{' when=When '}' ';')? (extraData=CodeBlock)? '}')
 ;
 
 When:
-	 ( betweenRounds = betweenRounds | betweenSeconds = betweenSeconds | random = Random | randomBetweenRound = randomBetweenRound | 'ifCondition' '(' ifCondition=Condition ')' | faultCond=FaultCond | 'syncpoint' '=' syncpoint=ID)
+	 ( betweenRounds = betweenRounds | betweenSeconds = betweenSeconds | random = Random | 'ifCondition' '(' ifCondition=Condition ')' | faultCond=FaultCond | 'syncpoint' '=' syncpoint=ID)
 ;
 
 Random:
@@ -106,12 +106,8 @@ betweenRounds:
 	'betweenRound' '(' start = INT ',' end = INT ',' interval = INT (',' condition=Condition)? (',' random = Random)?')'
 ;
 
-randomBetweenRound:
-	'randomBetweenRound' '(' start = INT ',' end = INT ',' interval = INT ',' chance = INT ')'
-;
-
 Condition:
-	('CondID' '(' name=ID ')') | ('Condition' (name=ID)? '{' ('imports' '{' imports=CODE_BOX '}' ',' 'code' '{')? code=CODE_BOX '}')
+	('CondID' '(' name=ID ')') | ('Condition' (name=ID)? '{' (('imports' '{' imports=CODE_BOX '}' ';' 'code' '{' code=CODE_BOX '}''}')|( code=CODE_BOX '}')))
 ;
 
 Where:

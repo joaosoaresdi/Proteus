@@ -1,4 +1,4 @@
-package zermia.proto;
+package agen.proto;
 
 import static io.grpc.stub.ClientCalls.asyncUnaryCall;
 import static io.grpc.stub.ClientCalls.asyncServerStreamingCall;
@@ -20,86 +20,86 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedStreamingCall;
 @javax.annotation.Generated(
     value = "by gRPC proto compiler (version 1.0.1)",
     comments = "Source: ProtoRuntime.proto")
-public class ZermiaServicesGrpc {
+public class ProteusServicesGrpc {
 
-  private ZermiaServicesGrpc() {}
+  private ProteusServicesGrpc() {}
 
-  public static final String SERVICE_NAME = "ZermiaServices";
+  public static final String SERVICE_NAME = "ProteusServices";
 
   // Static method descriptors that strictly reflect the proto.
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<zermia.proto.ProtoRuntime.ConnectionRequest,
-      zermia.proto.ProtoRuntime.ConnectionReply> METHOD_FIRST_CONNECTION =
+  public static final io.grpc.MethodDescriptor<agen.proto.ProtoRuntime.ConnectionRequest,
+      agen.proto.ProtoRuntime.ConnectionReply> METHOD_FIRST_CONNECTION =
       io.grpc.MethodDescriptor.create(
           io.grpc.MethodDescriptor.MethodType.UNARY,
           generateFullMethodName(
-              "ZermiaServices", "FirstConnection"),
-          io.grpc.protobuf.ProtoUtils.marshaller(zermia.proto.ProtoRuntime.ConnectionRequest.getDefaultInstance()),
-          io.grpc.protobuf.ProtoUtils.marshaller(zermia.proto.ProtoRuntime.ConnectionReply.getDefaultInstance()));
+              "ProteusServices", "FirstConnection"),
+          io.grpc.protobuf.ProtoUtils.marshaller(agen.proto.ProtoRuntime.ConnectionRequest.getDefaultInstance()),
+          io.grpc.protobuf.ProtoUtils.marshaller(agen.proto.ProtoRuntime.ConnectionReply.getDefaultInstance()));
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<zermia.proto.ProtoRuntime.Log,
-      zermia.proto.ProtoRuntime.ConnectionReply> METHOD_LOGGING =
+  public static final io.grpc.MethodDescriptor<agen.proto.ProtoRuntime.Log,
+      agen.proto.ProtoRuntime.ConnectionReply> METHOD_LOGGING =
       io.grpc.MethodDescriptor.create(
           io.grpc.MethodDescriptor.MethodType.UNARY,
           generateFullMethodName(
-              "ZermiaServices", "Logging"),
-          io.grpc.protobuf.ProtoUtils.marshaller(zermia.proto.ProtoRuntime.Log.getDefaultInstance()),
-          io.grpc.protobuf.ProtoUtils.marshaller(zermia.proto.ProtoRuntime.ConnectionReply.getDefaultInstance()));
+              "ProteusServices", "Logging"),
+          io.grpc.protobuf.ProtoUtils.marshaller(agen.proto.ProtoRuntime.Log.getDefaultInstance()),
+          io.grpc.protobuf.ProtoUtils.marshaller(agen.proto.ProtoRuntime.ConnectionReply.getDefaultInstance()));
   @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
-  public static final io.grpc.MethodDescriptor<zermia.proto.ProtoRuntime.StatusQuestion,
-      zermia.proto.ProtoRuntime.ConnectionReply> METHOD_SYNC_POINT =
+  public static final io.grpc.MethodDescriptor<agen.proto.ProtoRuntime.StatusQuestion,
+      agen.proto.ProtoRuntime.ConnectionReply> METHOD_SYNC_POINT =
       io.grpc.MethodDescriptor.create(
           io.grpc.MethodDescriptor.MethodType.UNARY,
           generateFullMethodName(
-              "ZermiaServices", "SyncPoint"),
-          io.grpc.protobuf.ProtoUtils.marshaller(zermia.proto.ProtoRuntime.StatusQuestion.getDefaultInstance()),
-          io.grpc.protobuf.ProtoUtils.marshaller(zermia.proto.ProtoRuntime.ConnectionReply.getDefaultInstance()));
+              "ProteusServices", "SyncPoint"),
+          io.grpc.protobuf.ProtoUtils.marshaller(agen.proto.ProtoRuntime.StatusQuestion.getDefaultInstance()),
+          io.grpc.protobuf.ProtoUtils.marshaller(agen.proto.ProtoRuntime.ConnectionReply.getDefaultInstance()));
 
   /**
    * Creates a new async stub that supports all call types for the service
    */
-  public static ZermiaServicesStub newStub(io.grpc.Channel channel) {
-    return new ZermiaServicesStub(channel);
+  public static ProteusServicesStub newStub(io.grpc.Channel channel) {
+    return new ProteusServicesStub(channel);
   }
 
   /**
    * Creates a new blocking-style stub that supports unary and streaming output calls on the service
    */
-  public static ZermiaServicesBlockingStub newBlockingStub(
+  public static ProteusServicesBlockingStub newBlockingStub(
       io.grpc.Channel channel) {
-    return new ZermiaServicesBlockingStub(channel);
+    return new ProteusServicesBlockingStub(channel);
   }
 
   /**
    * Creates a new ListenableFuture-style stub that supports unary and streaming output calls on the service
    */
-  public static ZermiaServicesFutureStub newFutureStub(
+  public static ProteusServicesFutureStub newFutureStub(
       io.grpc.Channel channel) {
-    return new ZermiaServicesFutureStub(channel);
+    return new ProteusServicesFutureStub(channel);
   }
 
   /**
    */
-  public static abstract class ZermiaServicesImplBase implements io.grpc.BindableService {
+  public static abstract class ProteusServicesImplBase implements io.grpc.BindableService {
 
     /**
      */
-    public void firstConnection(zermia.proto.ProtoRuntime.ConnectionRequest request,
-        io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply> responseObserver) {
+    public void firstConnection(agen.proto.ProtoRuntime.ConnectionRequest request,
+        io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_FIRST_CONNECTION, responseObserver);
     }
 
     /**
      */
-    public void logging(zermia.proto.ProtoRuntime.Log request,
-        io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply> responseObserver) {
+    public void logging(agen.proto.ProtoRuntime.Log request,
+        io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_LOGGING, responseObserver);
     }
 
     /**
      */
-    public void syncPoint(zermia.proto.ProtoRuntime.StatusQuestion request,
-        io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply> responseObserver) {
+    public void syncPoint(agen.proto.ProtoRuntime.StatusQuestion request,
+        io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply> responseObserver) {
       asyncUnimplementedUnaryCall(METHOD_SYNC_POINT, responseObserver);
     }
 
@@ -109,22 +109,22 @@ public class ZermiaServicesGrpc {
             METHOD_FIRST_CONNECTION,
             asyncUnaryCall(
               new MethodHandlers<
-                zermia.proto.ProtoRuntime.ConnectionRequest,
-                zermia.proto.ProtoRuntime.ConnectionReply>(
+                agen.proto.ProtoRuntime.ConnectionRequest,
+                agen.proto.ProtoRuntime.ConnectionReply>(
                   this, METHODID_FIRST_CONNECTION)))
           .addMethod(
             METHOD_LOGGING,
             asyncUnaryCall(
               new MethodHandlers<
-                zermia.proto.ProtoRuntime.Log,
-                zermia.proto.ProtoRuntime.ConnectionReply>(
+                agen.proto.ProtoRuntime.Log,
+                agen.proto.ProtoRuntime.ConnectionReply>(
                   this, METHODID_LOGGING)))
           .addMethod(
             METHOD_SYNC_POINT,
             asyncUnaryCall(
               new MethodHandlers<
-                zermia.proto.ProtoRuntime.StatusQuestion,
-                zermia.proto.ProtoRuntime.ConnectionReply>(
+                agen.proto.ProtoRuntime.StatusQuestion,
+                agen.proto.ProtoRuntime.ConnectionReply>(
                   this, METHODID_SYNC_POINT)))
           .build();
     }
@@ -132,42 +132,42 @@ public class ZermiaServicesGrpc {
 
   /**
    */
-  public static final class ZermiaServicesStub extends io.grpc.stub.AbstractStub<ZermiaServicesStub> {
-    private ZermiaServicesStub(io.grpc.Channel channel) {
+  public static final class ProteusServicesStub extends io.grpc.stub.AbstractStub<ProteusServicesStub> {
+    private ProteusServicesStub(io.grpc.Channel channel) {
       super(channel);
     }
 
-    private ZermiaServicesStub(io.grpc.Channel channel,
+    private ProteusServicesStub(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @java.lang.Override
-    protected ZermiaServicesStub build(io.grpc.Channel channel,
+    protected ProteusServicesStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
-      return new ZermiaServicesStub(channel, callOptions);
+      return new ProteusServicesStub(channel, callOptions);
     }
 
     /**
      */
-    public void firstConnection(zermia.proto.ProtoRuntime.ConnectionRequest request,
-        io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply> responseObserver) {
+    public void firstConnection(agen.proto.ProtoRuntime.ConnectionRequest request,
+        io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_FIRST_CONNECTION, getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void logging(zermia.proto.ProtoRuntime.Log request,
-        io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply> responseObserver) {
+    public void logging(agen.proto.ProtoRuntime.Log request,
+        io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_LOGGING, getCallOptions()), request, responseObserver);
     }
 
     /**
      */
-    public void syncPoint(zermia.proto.ProtoRuntime.StatusQuestion request,
-        io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply> responseObserver) {
+    public void syncPoint(agen.proto.ProtoRuntime.StatusQuestion request,
+        io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(METHOD_SYNC_POINT, getCallOptions()), request, responseObserver);
     }
@@ -175,39 +175,39 @@ public class ZermiaServicesGrpc {
 
   /**
    */
-  public static final class ZermiaServicesBlockingStub extends io.grpc.stub.AbstractStub<ZermiaServicesBlockingStub> {
-    private ZermiaServicesBlockingStub(io.grpc.Channel channel) {
+  public static final class ProteusServicesBlockingStub extends io.grpc.stub.AbstractStub<ProteusServicesBlockingStub> {
+    private ProteusServicesBlockingStub(io.grpc.Channel channel) {
       super(channel);
     }
 
-    private ZermiaServicesBlockingStub(io.grpc.Channel channel,
+    private ProteusServicesBlockingStub(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @java.lang.Override
-    protected ZermiaServicesBlockingStub build(io.grpc.Channel channel,
+    protected ProteusServicesBlockingStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
-      return new ZermiaServicesBlockingStub(channel, callOptions);
+      return new ProteusServicesBlockingStub(channel, callOptions);
     }
 
     /**
      */
-    public zermia.proto.ProtoRuntime.ConnectionReply firstConnection(zermia.proto.ProtoRuntime.ConnectionRequest request) {
+    public agen.proto.ProtoRuntime.ConnectionReply firstConnection(agen.proto.ProtoRuntime.ConnectionRequest request) {
       return blockingUnaryCall(
           getChannel(), METHOD_FIRST_CONNECTION, getCallOptions(), request);
     }
 
     /**
      */
-    public zermia.proto.ProtoRuntime.ConnectionReply logging(zermia.proto.ProtoRuntime.Log request) {
+    public agen.proto.ProtoRuntime.ConnectionReply logging(agen.proto.ProtoRuntime.Log request) {
       return blockingUnaryCall(
           getChannel(), METHOD_LOGGING, getCallOptions(), request);
     }
 
     /**
      */
-    public zermia.proto.ProtoRuntime.ConnectionReply syncPoint(zermia.proto.ProtoRuntime.StatusQuestion request) {
+    public agen.proto.ProtoRuntime.ConnectionReply syncPoint(agen.proto.ProtoRuntime.StatusQuestion request) {
       return blockingUnaryCall(
           getChannel(), METHOD_SYNC_POINT, getCallOptions(), request);
     }
@@ -215,42 +215,42 @@ public class ZermiaServicesGrpc {
 
   /**
    */
-  public static final class ZermiaServicesFutureStub extends io.grpc.stub.AbstractStub<ZermiaServicesFutureStub> {
-    private ZermiaServicesFutureStub(io.grpc.Channel channel) {
+  public static final class ProteusServicesFutureStub extends io.grpc.stub.AbstractStub<ProteusServicesFutureStub> {
+    private ProteusServicesFutureStub(io.grpc.Channel channel) {
       super(channel);
     }
 
-    private ZermiaServicesFutureStub(io.grpc.Channel channel,
+    private ProteusServicesFutureStub(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @java.lang.Override
-    protected ZermiaServicesFutureStub build(io.grpc.Channel channel,
+    protected ProteusServicesFutureStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
-      return new ZermiaServicesFutureStub(channel, callOptions);
+      return new ProteusServicesFutureStub(channel, callOptions);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<zermia.proto.ProtoRuntime.ConnectionReply> firstConnection(
-        zermia.proto.ProtoRuntime.ConnectionRequest request) {
+    public com.google.common.util.concurrent.ListenableFuture<agen.proto.ProtoRuntime.ConnectionReply> firstConnection(
+        agen.proto.ProtoRuntime.ConnectionRequest request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_FIRST_CONNECTION, getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<zermia.proto.ProtoRuntime.ConnectionReply> logging(
-        zermia.proto.ProtoRuntime.Log request) {
+    public com.google.common.util.concurrent.ListenableFuture<agen.proto.ProtoRuntime.ConnectionReply> logging(
+        agen.proto.ProtoRuntime.Log request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_LOGGING, getCallOptions()), request);
     }
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<zermia.proto.ProtoRuntime.ConnectionReply> syncPoint(
-        zermia.proto.ProtoRuntime.StatusQuestion request) {
+    public com.google.common.util.concurrent.ListenableFuture<agen.proto.ProtoRuntime.ConnectionReply> syncPoint(
+        agen.proto.ProtoRuntime.StatusQuestion request) {
       return futureUnaryCall(
           getChannel().newCall(METHOD_SYNC_POINT, getCallOptions()), request);
     }
@@ -265,10 +265,10 @@ public class ZermiaServicesGrpc {
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final ZermiaServicesImplBase serviceImpl;
+    private final ProteusServicesImplBase serviceImpl;
     private final int methodId;
 
-    public MethodHandlers(ZermiaServicesImplBase serviceImpl, int methodId) {
+    public MethodHandlers(ProteusServicesImplBase serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -278,16 +278,16 @@ public class ZermiaServicesGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_FIRST_CONNECTION:
-          serviceImpl.firstConnection((zermia.proto.ProtoRuntime.ConnectionRequest) request,
-              (io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply>) responseObserver);
+          serviceImpl.firstConnection((agen.proto.ProtoRuntime.ConnectionRequest) request,
+              (io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply>) responseObserver);
           break;
         case METHODID_LOGGING:
-          serviceImpl.logging((zermia.proto.ProtoRuntime.Log) request,
-              (io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply>) responseObserver);
+          serviceImpl.logging((agen.proto.ProtoRuntime.Log) request,
+              (io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply>) responseObserver);
           break;
         case METHODID_SYNC_POINT:
-          serviceImpl.syncPoint((zermia.proto.ProtoRuntime.StatusQuestion) request,
-              (io.grpc.stub.StreamObserver<zermia.proto.ProtoRuntime.ConnectionReply>) responseObserver);
+          serviceImpl.syncPoint((agen.proto.ProtoRuntime.StatusQuestion) request,
+              (io.grpc.stub.StreamObserver<agen.proto.ProtoRuntime.ConnectionReply>) responseObserver);
           break;
         default:
           throw new AssertionError();

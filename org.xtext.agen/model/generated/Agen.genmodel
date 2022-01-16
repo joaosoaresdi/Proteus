@@ -27,7 +27,8 @@
     </genClasses>
     <genClasses ecoreClass="Agen.ecore#//Types"/>
     <genClasses ecoreClass="Agen.ecore#//RunConfiguration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//RunConfiguration/CoordinatorLocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//RunConfiguration/runtimePackage"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//RunConfiguration/coordinatorLocation"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//RunConfiguration/nodes"/>
     </genClasses>
     <genClasses ecoreClass="Agen.ecore#//Node">
@@ -110,7 +111,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//When/betweenRounds"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//When/betweenSeconds"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//When/random"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//When/randomBetweenRound"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//When/ifCondition"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//When/faultCond"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//When/syncpoint"/>
@@ -128,12 +128,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//betweenRounds/interval"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//betweenRounds/condition"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference Agen.ecore#//betweenRounds/random"/>
-    </genClasses>
-    <genClasses ecoreClass="Agen.ecore#//randomBetweenRound">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//randomBetweenRound/start"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//randomBetweenRound/end"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//randomBetweenRound/interval"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//randomBetweenRound/chance"/>
     </genClasses>
     <genClasses ecoreClass="Agen.ecore#//Condition">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute Agen.ecore#//Condition/name"/>

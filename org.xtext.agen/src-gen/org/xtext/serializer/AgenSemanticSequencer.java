@@ -38,7 +38,6 @@ import org.xtext.agen.When;
 import org.xtext.agen.Where;
 import org.xtext.agen.betweenRounds;
 import org.xtext.agen.betweenSeconds;
-import org.xtext.agen.randomBetweenRound;
 import org.xtext.services.AgenGrammarAccess;
 
 @SuppressWarnings("all")
@@ -124,9 +123,6 @@ public class AgenSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 			case AgenPackage.BETWEEN_SECONDS:
 				sequence_betweenSeconds(context, (betweenSeconds) semanticObject); 
 				return; 
-			case AgenPackage.RANDOM_BETWEEN_ROUND:
-				sequence_randomBetweenRound(context, (randomBetweenRound) semanticObject); 
-				return; 
 			}
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
@@ -198,7 +194,7 @@ public class AgenSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     CodeBlock returns CodeBlock
 	 *
 	 * Constraint:
-	 *     (name=ID | (name=ID? imports=CODE_BOX? code=CODE_BOX))
+	 *     (name=ID | (name=ID? ((imports=CODE_BOX code=CODE_BOX) | code=CODE_BOX)))
 	 */
 	protected void sequence_CodeBlock(ISerializationContext context, CodeBlock semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -211,7 +207,7 @@ public class AgenSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     Condition returns Condition
 	 *
 	 * Constraint:
-	 *     (name=ID | (name=ID? imports=CODE_BOX? code=CODE_BOX))
+	 *     (name=ID | (name=ID? ((imports=CODE_BOX code=CODE_BOX) | code=CODE_BOX)))
 	 */
 	protected void sequence_Condition(ISerializationContext context, Condition semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -371,7 +367,7 @@ public class AgenSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     RunConfiguration returns RunConfiguration
 	 *
 	 * Constraint:
-	 *     (CoordinatorLocation=STRING nodes+=Node*)
+	 *     (runtimePackage=STRING coordinatorLocation=STRING nodes+=Node*)
 	 */
 	protected void sequence_RunConfiguration(ISerializationContext context, RunConfiguration semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
@@ -440,7 +436,6 @@ public class AgenSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *         betweenRounds=betweenRounds | 
 	 *         betweenSeconds=betweenSeconds | 
 	 *         random=Random | 
-	 *         randomBetweenRound=randomBetweenRound | 
 	 *         ifCondition=Condition | 
 	 *         faultCond=FaultCond | 
 	 *         syncpoint=ID
@@ -493,33 +488,6 @@ public class AgenSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getBetweenSecondsAccess().getStartINTTerminalRuleCall_2_0(), semanticObject.getStart());
 		feeder.accept(grammarAccess.getBetweenSecondsAccess().getEndINTTerminalRuleCall_4_0(), semanticObject.getEnd());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
-	 *     randomBetweenRound returns randomBetweenRound
-	 *
-	 * Constraint:
-	 *     (start=INT end=INT interval=INT chance=INT)
-	 */
-	protected void sequence_randomBetweenRound(ISerializationContext context, randomBetweenRound semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__START) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__START));
-			if (transientValues.isValueTransient(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__END) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__END));
-			if (transientValues.isValueTransient(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__INTERVAL) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__INTERVAL));
-			if (transientValues.isValueTransient(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__CHANCE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, AgenPackage.Literals.RANDOM_BETWEEN_ROUND__CHANCE));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getRandomBetweenRoundAccess().getStartINTTerminalRuleCall_2_0(), semanticObject.getStart());
-		feeder.accept(grammarAccess.getRandomBetweenRoundAccess().getEndINTTerminalRuleCall_4_0(), semanticObject.getEnd());
-		feeder.accept(grammarAccess.getRandomBetweenRoundAccess().getIntervalINTTerminalRuleCall_6_0(), semanticObject.getInterval());
-		feeder.accept(grammarAccess.getRandomBetweenRoundAccess().getChanceINTTerminalRuleCall_8_0(), semanticObject.getChance());
 		feeder.finish();
 	}
 	

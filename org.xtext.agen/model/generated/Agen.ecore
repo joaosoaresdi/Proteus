@@ -7,7 +7,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Types"/>
   <eClassifiers xsi:type="ecore:EClass" name="RunConfiguration" eSuperTypes="#//Types">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="CoordinatorLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="runtimePackage" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="coordinatorLocation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
         eType="#//Node" containment="true"/>
   </eClassifiers>
@@ -122,8 +123,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="random" eType="#//Random"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="randomBetweenRound" eType="#//randomBetweenRound"
-        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ifCondition" eType="#//Condition"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="faultCond" eType="#//FaultCond"
@@ -145,12 +144,6 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="random" eType="#//Random"
         containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="randomBetweenRound">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="interval" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="chance" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Condition" eSuperTypes="#//Types">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

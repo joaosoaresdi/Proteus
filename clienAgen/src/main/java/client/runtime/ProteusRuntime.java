@@ -1,22 +1,25 @@
 package client.runtime;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import zermia.proto.ProtoRuntime.ConnectionReply;
-import zermia.proto.ProtoRuntime.ConnectionRequest;
-import zermia.proto.ProtoRuntime.ConnectionRequest.Builder;
-import zermia.proto.ProtoRuntime.ExecInfo;
-import zermia.proto.ProtoRuntime.Log;
-import zermia.proto.ProtoRuntime.StatusQuestion;
-import zermia.proto.ProtoRuntime.Syncpoint;
-import zermia.proto.ProtoRuntime.Syncpoint.nodetype;
-import zermia.proto.ProtoRuntime.Syncpoint.synctype;
-import zermia.proto.ZermiaServicesGrpc;
+import proteus.proto.ProtoRuntime.ConnectionReply;
+import proteus.proto.ProtoRuntime.ConnectionRequest;
+import proteus.proto.ProtoRuntime.ConnectionRequest.Builder;
+import proteus.proto.ProtoRuntime.ExecInfo;
+import proteus.proto.ProtoRuntime.Log;
+import proteus.proto.ProtoRuntime.StatusQuestion;
+import proteus.proto.ProtoRuntime.Syncpoint;
+import proteus.proto.ProtoRuntime.Syncpoint.nodetype;
+import proteus.proto.ProtoRuntime.Syncpoint.synctype;
+import proteus.proto.ProteusServicesGrpc;
 
 public class ProteusRuntime {
 	static ManagedChannel mgChannel;
-	static ZermiaServicesGrpc.ZermiaServicesBlockingStub runtimeBlockStub;
+	static ProteusServicesGrpc.ProteusServicesBlockingStub runtimeBlockStub;
 	static ArrayList<ExecInfo> execInfos = new ArrayList<ExecInfo>();
 	
 	public static void ChannelCreation(String coordinatorIP, int coordinatorPort) {
@@ -30,18 +33,21 @@ public class ProteusRuntime {
 	}
 	
 	public static void makeInitialConnection(String nodeName, String nodeLocation, String coordinatorLocation, Boolean faulty, String[] syncpointsDependant, String[] syncpointsTrigger) {
+		Logger.getLogger(ProteusRuntime.class.getName()).log(Level.INFO, "Node " + nodeName + " is making an initial connection");
 		String[] coordinatorLocations = coordinatorLocation.split(":");
 		ChannelCreation(coordinatorLocations[0], Integer.parseInt(coordinatorLocations[1]));
-		runtimeBlockStub = ZermiaServicesGrpc.newBlockingStub(mgChannel);
+		runtimeBlockStub = ProteusServicesGrpc.newBlockingStub(mgChannel);
 		
 		Builder reqBuilder = ConnectionRequest.newBuilder()
 				.setReplicaID(nodeName)
 				.setNodeLocation(nodeLocation)
 				.setFaulty(faulty);
-		
+		System.out.println(coordinatorLocations[0] + " " + Integer.parseInt(coordinatorLocations[1]));
+
 		int syncsI = 0;
-		for(int i=0; i<=syncpointsDependant.length;i+=2) {
-			zermia.proto.ProtoRuntime.Syncpoint.Builder syncsBuilder = Syncpoint.newBuilder()
+		for(int i=0; i<syncpointsDependant.length;i+=3) {
+			System.out.println(syncpointsDependant[0] + ' ' + syncpointsDependant[1] + ' ' + syncpointsDependant[2]);
+			proteus.proto.ProtoRuntime.Syncpoint.Builder syncsBuilder = Syncpoint.newBuilder()
 				.setName(syncpointsDependant[i])
 				.setFaultCondName(syncpointsDependant[i+1]);
 		
@@ -52,12 +58,12 @@ public class ProteusRuntime {
 			}
 			syncsBuilder.setNodeType(nodetype.dependant);
 			Syncpoint syncs = syncsBuilder.build();
-			reqBuilder.setSyncpoint(syncsI, syncs);
+			reqBuilder.addSyncpoint(syncsI, syncs);
 			syncsI++;
 		}
 		
-		for(int i=0; i<=syncpointsTrigger.length;i+=3) {
-			zermia.proto.ProtoRuntime.Syncpoint.Builder syncsBuilder = Syncpoint.newBuilder()
+		for(int i=0; i<syncpointsTrigger.length;i+=3) {
+			proteus.proto.ProtoRuntime.Syncpoint.Builder syncsBuilder = Syncpoint.newBuilder()
 				.setName(syncpointsTrigger[i])
 				.setFaultCondName(syncpointsDependant[i+1]);
 		
@@ -68,16 +74,21 @@ public class ProteusRuntime {
 			}
 			syncsBuilder.setNodeType(nodetype.trigger);
 			Syncpoint syncs = syncsBuilder.build();
-			reqBuilder.setSyncpoint(syncsI, syncs);
+			reqBuilder.addSyncpoint(syncsI, syncs);
 			syncsI++;
 		}
 		
 		ConnectionRequest req = reqBuilder.build();
-		
+		try {
 		ConnectionReply rep = runtimeBlockStub.firstConnection(req);
+		} catch (RuntimeException e) {
+			Logger.getLogger(ProteusRuntime.class.getName()).log(Level.SEVERE, "Cant connect to server");
+
+		}
 	}
 	
 	public static void addLogExecInfo(String execName, String whenType, String whenValue){
+		Logger.getLogger(ProteusRuntime.class.getName()).log(Level.INFO, "Logging " + execName + " execution data");
 		ExecInfo execInfo = ExecInfo.newBuilder()
 				.setExecName(execName)
 				.setWhenValue(whenType)
@@ -87,7 +98,8 @@ public class ProteusRuntime {
 	}
 	
 	public static void sendLogs(String nodeName, String faultName, long timestamp, String randomLogData) {
-		runtimeBlockStub = ZermiaServicesGrpc.newBlockingStub(mgChannel);
+		Logger.getLogger(ProteusRuntime.class.getName()).log(Level.INFO, "Sending " + nodeName + " logging data");
+		runtimeBlockStub = ProteusServicesGrpc.newBlockingStub(mgChannel);
 		Log logData = Log.newBuilder()
 				.setNodeName(nodeName)
 				.setFaultName(faultName)
@@ -100,6 +112,7 @@ public class ProteusRuntime {
 	}
 	
 	public static Boolean askSyncpointStatus(String nodeName, String syncpointName) {
+		Logger.getLogger(ProteusRuntime.class.getName()).log(Level.INFO, nodeName + " is requesting " + syncpointName + "sync status");
 		StatusQuestion sQuest = StatusQuestion.newBuilder()
 				.setNodeName(nodeName)
 				.setSyncpointName(syncpointName)

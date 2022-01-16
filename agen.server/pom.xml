@@ -2,9 +2,9 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>serverAgen</groupId>
   <artifactId>agen.server</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>agenServer</name>
-  <description>zermiamainserver</description>
+  <description>ProteusCoordinator</description>
   <dependencies>
   	<dependency>
   		<groupId>org.aspectj</groupId>
@@ -45,13 +45,23 @@
     <groupId>org.apache.poi</groupId>
     <artifactId>poi-ooxml</artifactId>
     <version>3.17</version>
-</dependency>	 
+	</dependency>
+	<dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <version>2.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.1</version>
+    </dependency>
 </dependencies>  
    <build>
 		<defaultGoal>clean generate-sources compile install</defaultGoal>
   
-		  <plugins>
-		  <plugin>
+	  <plugins>
+	  	<plugin>
 			<groupId>com.github.os72</groupId>
 			<artifactId>protoc-jar-maven-plugin</artifactId>
 			<version>3.11.1</version>
@@ -64,31 +74,54 @@
 					<configuration>
 						<protocArtifact>com.google.protobuf:protoc:3.0.0</protocArtifact>
 						<inputDirectories>
-							<include>ProtoZermia</include>
+							<include>ProtoProteus</include>
 						</inputDirectories>
 						<outputTargets>
 							<outputTarget>
 								<type>java</type>
-								<outputDirectory>ProtoZermia</outputDirectory>
+								<outputDirectory>ProtoProteus</outputDirectory>
 							</outputTarget>
 							<outputTarget>
 								<type>grpc-java</type>
 								<pluginArtifact>io.grpc:protoc-gen-grpc-java:1.0.1</pluginArtifact>
-								<outputDirectory>ProtoZermia</outputDirectory>
+								<outputDirectory>ProtoProteus</outputDirectory>
 							</outputTarget>
 						</outputTargets>
 					</configuration>
 				</execution>
 			</executions>
 		</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<release>11</release>
-				</configuration>
-			</plugin>
+		<plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<version>3.8.1</version>
+			<configuration>
+				<release>11</release>
+			</configuration>
+		</plugin>
+		<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-assembly-plugin</artifactId>
+	        <version>3.2.0</version>
+	        <configuration>
+	            <descriptorRefs>
+	                <descriptorRef>jar-with-dependencies</descriptorRef>
+	            </descriptorRefs>
+	            <archive>
+	                <manifest>
+	                    <mainClass>agen.server.serverMain</mainClass>
+	                </manifest>
+	            </archive>
+	        </configuration>
+	        <executions>
+	            <execution>
+	                <phase>package</phase>
+	                <goals>
+	                    <goal>single</goal>
+	                </goals>
+	            </execution>
+	        </executions>
+		</plugin>
 	</plugins>
 </build> 
 </project>

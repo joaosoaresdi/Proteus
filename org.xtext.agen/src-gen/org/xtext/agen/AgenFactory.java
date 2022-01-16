@@ -222,15 +222,6 @@ public interface AgenFactory extends EFactory
   betweenRounds createbetweenRounds();
 
   /**
-   * Returns a new object of class '<em>random Between Round</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>random Between Round</em>'.
-   * @generated
-   */
-  randomBetweenRound createrandomBetweenRound();
-
-  /**
    * Returns a new object of class '<em>Condition</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

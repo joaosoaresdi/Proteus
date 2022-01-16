@@ -1,10 +1,11 @@
 package agen.obj;
 
 import java.util.HashMap;
+import java.util.List;
 
 import agen.server.serverMain;
-import zermia.proto.ProtoRuntime.ExecInfo;
-import zermia.proto.ProtoRuntime.Log;
+import agen.proto.ProtoRuntime.ExecInfo;
+import agen.proto.ProtoRuntime.Log;
 
 public class Fault {
 	String faultName;
@@ -23,13 +24,19 @@ public class Fault {
 		this.faultName = logInfo.getFaultName();
 		this.startTimestamp = logInfo.getTimestamp();
 		this.randomLogInfo = logInfo.getRandomLogInfo();
-		if(execList != null) {
-			for(String syncpoint : serverMain.faultCondToSyncpoint.get(logInfo.getFaultName())) {
-				serverMain.syncpointList.get(syncpoint).registerTrigger(logInfo.getNodeName());
+		if(logInfo.getExecInfoCount() > 0) {
+			if (!serverMain.faultCondToSyncpoint.isEmpty()) {
+				List<String> faultIterator = serverMain.faultCondToSyncpoint.get(logInfo.getFaultName());
+				if(faultIterator != null) {
+					for(String syncpoint : faultIterator) {
+						serverMain.syncpointList.get(syncpoint).registerTrigger(logInfo.getNodeName());
+					}
+				}
 			}
-		}
-		for( ExecInfo execInfo : logInfo.getExecInfoList()) {
-			execList.put(execInfo.getExecName(), execInfo);
+			this.execList = new HashMap<String, ExecInfo>();
+			for( ExecInfo execInfo : logInfo.getExecInfoList()) {
+				execList.put(execInfo.getExecName(), execInfo);
+			}
 		}
 	}
 }

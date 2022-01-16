@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option java_package = "zermia.proto";
+option java_package = "agen.proto";
 
-service ZermiaServices{
+service ProteusServices{
 	rpc FirstConnection (ConnectionRequest) returns (ConnectionReply) {}
 	rpc Logging (Log) returns (ConnectionReply) {}
 	rpc SyncPoint (StatusQuestion) returns (ConnectionReply) {}
@@ -36,26 +36,27 @@ message ExecInfo{
 		Random = 3;
 		Sync = 4;
 		FaultCond = 5;
-		Custom = 6;
+		Always = 6;
+		Custom = 7;
 	}
 	WhenType whenType = 2;
 	string whenValue = 3;
 }
 
-message Syncpoint{
-	string name = 1;
-	string faultCondName = 2;
-	enum synctype {
-		onetime = 0;
-		recurrent = 1;
+	message Syncpoint{
+		string name = 1;
+		string faultCondName = 2;
+		enum synctype {
+			onetime = 0;
+			recurrent = 1;
+		}
+		synctype syncType = 3;
+		enum nodetype {
+			trigger = 0;
+			dependant = 1;
+		}
+		nodetype nodeType = 4;
 	}
-	synctype syncType = 3;
-	enum nodetype {
-		trigger = 0;
-		dependant = 1;
-	}
-	nodetype nodeType = 4;
-}
 
 message StatusQuestion{
 	string nodeName = 1;

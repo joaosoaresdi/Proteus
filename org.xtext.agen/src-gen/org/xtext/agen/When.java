@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.xtext.agen.When#getBetweenRounds <em>Between Rounds</em>}</li>
  *   <li>{@link org.xtext.agen.When#getBetweenSeconds <em>Between Seconds</em>}</li>
  *   <li>{@link org.xtext.agen.When#getRandom <em>Random</em>}</li>
- *   <li>{@link org.xtext.agen.When#getRandomBetweenRound <em>Random Between Round</em>}</li>
  *   <li>{@link org.xtext.agen.When#getIfCondition <em>If Condition</em>}</li>
  *   <li>{@link org.xtext.agen.When#getFaultCond <em>Fault Cond</em>}</li>
  *   <li>{@link org.xtext.agen.When#getSyncpoint <em>Syncpoint</em>}</li>
@@ -94,28 +93,6 @@ public interface When extends EObject
    * @generated
    */
   void setRandom(Random value);
-
-  /**
-   * Returns the value of the '<em><b>Random Between Round</b></em>' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Random Between Round</em>' containment reference.
-   * @see #setRandomBetweenRound(randomBetweenRound)
-   * @see org.xtext.agen.AgenPackage#getWhen_RandomBetweenRound()
-   * @model containment="true"
-   * @generated
-   */
-  randomBetweenRound getRandomBetweenRound();
-
-  /**
-   * Sets the value of the '{@link org.xtext.agen.When#getRandomBetweenRound <em>Random Between Round</em>}' containment reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Random Between Round</em>' containment reference.
-   * @see #getRandomBetweenRound()
-   * @generated
-   */
-  void setRandomBetweenRound(randomBetweenRound value);
 
   /**
    * Returns the value of the '<em><b>If Condition</b></em>' containment reference.
