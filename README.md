@@ -1,5 +1,6 @@
 # Proteus
-DSL for a fault injection system
+A tool for testing of applications using fault injection. It consists of a DSL that generates the fault injection code, this project also includes supporting infraestructure which includes a server and client.
+This work was done as part of the master's degree for Computer Security at the Faculty of Sciences, University of Porto
 
 The system is divided into 3 components, the client, server and generated code for each component
 
